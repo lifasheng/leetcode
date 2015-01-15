@@ -1,6 +1,46 @@
 class Solution {
 public:
-#define M3
+#define M0
+#ifdef M0
+/*
+两遍扫描法，类似于candy。
+对于某一个柱子，如果它左右两边的最大柱子高度的较小者比自己的柱子高度要大，这该柱子上面就可以容纳水。
+对于任何一个柱子，检查其左右的最大柱子高度，该柱子能容纳的面积就是min(max_left, max_right) - height.
+可以从左右各扫一遍，存入一个数组；O(n)time and space
+*/
+    int trap(int A[], int n) {
+        if (!A || n <= 0) return 0;
+
+        int *left = new int[n];
+        int *right = new int[n];
+        int result = 0;
+
+        // 找到该柱子左边最大的柱子高度
+        int imax = 0;
+        for(int i=0; i<n; ++i)  {
+            left[i] = imax;
+            imax = max(imax, A[i]);
+        }
+
+        // 找到该柱子右边最大的柱子高度
+        // 由于已经找到该柱左右两边的最大柱子高度，所以可以计算出该柱子所能容纳的水量。
+        imax = 0;
+        for(int i=n-1; i>=0; --i) {
+            right[i] = imax;
+            imax = max(imax, A[i]);
+
+            int minMax = min(left[i], right[i]);
+            if (minMax > A[i]) {
+                result += minMax - A[i];
+            }
+        }
+
+        delete []left;
+        delete []right;
+
+        return result;
+    }
+#endif
 #ifdef M1
 /*
 这是我的解法：
