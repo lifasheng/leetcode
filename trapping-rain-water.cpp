@@ -12,7 +12,7 @@ public:
         if (!A || n <= 0) return 0;
 
         int *left = new int[n];
-        int *right = new int[n];
+        int *right = new int[n]; // note that this array is not necessary, but we use it here for simplicity.
         int result = 0;
 
         // 找到该柱子左边最大的柱子高度
