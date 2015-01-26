@@ -47,17 +47,17 @@ public:
     bool isSameTree(TreeNode *p, TreeNode *q) {
         stack<TreeNode*> s;
         while( p || q || !s.empty()) {
-            if (p && q) {
+            if (p && q) { // p,q 都不为空
                 if (p->val != q->val) return false;
                 s.push(p);
                 s.push(q);
                 p = p->left;
                 q = q->left;
             }
-            else if (p || q) {
+            else if (p || q) { //p, q有一个为空
                 return false;
             }
-            else {
+            else { // p, q 都为空
                 p = s.top();
                 s.pop();
                 q = s.top();
@@ -68,7 +68,7 @@ public:
             }
         }
 
-        return !p && !q;
+        return true;
     }
 #endif
 };
