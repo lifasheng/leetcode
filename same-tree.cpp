@@ -57,10 +57,13 @@ public:
             else if (p || q) { //p, q有一个为空
                 return false;
             }
-            else { // p, q 都为空
-                p = s.top();
+            else { // p, q 都为空，
+                   // 这里最好也保持出栈顺序和入栈顺序相反,这样能保证p总是指向左子树，q总是指向右子树。
+                   // 不过不相反也没关系，因为比较的两棵树是对的，先左子树，再右子树。
+                   // 这里都是比较右子树，至于p，q指向哪个右子树不重要。
+                q = s.top(); //p = s.top();
                 s.pop();
-                q = s.top();
+                p = s.top(); //q = s.top();
                 s.pop();
 
                 p = p->right;
