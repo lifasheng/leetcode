@@ -53,7 +53,7 @@ public:
         return root;
     }
 #endif
-#ifdef M3 // 迭代版1
+#ifdef M3 // 迭代版1, 采用先序遍历的方法
     void flatten(TreeNode *root) {
         if (!root) return;
         
