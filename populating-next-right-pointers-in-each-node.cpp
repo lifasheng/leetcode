@@ -8,11 +8,10 @@
  */
 class Solution {
 public:
-#define M2
+#define M4
 #ifdef M1
 /*
-思路：采用先序遍历的迭代版本，用一个栈辅助 （不知道这算不算不符合题意呢，因为这是O(n) space。
-如果一定要O(1) space， 只能morris方法。）
+思路：采用先序遍历的迭代版本，用一个栈辅助 （不知道这算不算不符合题意呢，因为这是O(n) space）
 在遍历每个结点p的时候，让p的左孩子指向p的右孩子，而p的右孩子则指向p的next的左孩子(如果p的next不为空)。
 */
     void connect(TreeLinkNode *root) {
@@ -78,6 +77,56 @@ public:
                 
                 
             }
+        }
+    }
+#endif
+#ifdef M3  //递归 O(n) time
+// 对每一层，用一个链表将其子结点串起来，形成了下一层。
+// 这种方法充分利用了next指针。
+    void connect(TreeLinkNode *root) {
+        if (!root) return;
+
+        TreeLinkNode dummy(-1);
+        TreeLinkNode *prev = &dummy;
+
+        for(TreeLinkNode *cur = root; cur; cur = cur->next) {
+            if (cur->left) {
+                prev->next = cur->left;
+                prev = prev->next;
+            }
+
+            if (cur->right) {
+                prev->next = cur->right;
+                prev = prev->next;
+            }
+        }
+
+        connect(dummy.next);
+    }
+#endif
+#ifdef M4 // 迭代版, 也是一层一层地处理
+// 和M3中的递版本很类似，只是用next取代了递归而已。
+    void connect(TreeLinkNode *root) {
+        if (!root) return;
+
+        while (root) {
+            TreeLinkNode dummy(-1);
+            TreeLinkNode *prev = &dummy;
+            TreeLinkNode *next = NULL;
+            for(TreeLinkNode *cur = root; cur; cur = cur->next) {
+                if (cur->left) {
+                    prev->next = cur->left;
+                    prev = prev->next;
+                    if (!next) next = cur->left;
+                }
+
+                if (cur->right) {
+                    prev->next = cur->right;
+                    prev = prev->next;
+                    if (!next) next = cur->right;
+                }
+            }
+            root = next;
         }
     }
 #endif
