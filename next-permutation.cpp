@@ -21,6 +21,8 @@ public:
         
         // step1
         // note that >= is important, consider example: [1, 1]
+        // [1,3,1] => [1 1 3] [1 3 1] [3 1 1]
+        // if not >=, then [3 1 1] will return true, but it should return false.
         while(pivot != rlast && *pivot >= *(prev(pivot))) {
             ++pivot;
         }
