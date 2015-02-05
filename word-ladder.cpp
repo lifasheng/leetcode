@@ -35,6 +35,7 @@ lfs： 层次遍历有几种方法，具见二叉树的层次遍历。
         queue<string> cur, next; // 当前层和下一层
         int level = 1; // 当前第几层
         
+        visited.insert(start);//不能再扩展到起始结点了。
         cur.push(start);
         while(!cur.empty()) {
             while(!cur.empty()) {
