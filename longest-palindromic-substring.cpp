@@ -85,7 +85,8 @@ f[i,j] = true  if i == j
         bool f[size][size];
         fill(&f[0][0], &f[0][0]+size*size, false);
         
-        // 下面的循环相当于填充二维数组f的左下角（右上角没用到）
+        // 下面的循环相当于填充二维数组f的右上角（左下角没用到）
+        /*
         for(int i=0; i<size; ++i) {
             f[i][i] = true;
             for(int j=0; j<i; ++j) {
@@ -93,6 +94,18 @@ f[i,j] = true  if i == j
                 if (f[j][i] && (i-j+1) > maxLen) {
                     maxLen = i-j+1;
                     idx = j;
+                }
+            }
+        }
+        */
+        // 从最后一行开始计算，计算右上角。
+        // 个人觉得比上面的那段代码好理解一点，所以替换一下，这里要注意 j-i < 2， 包含了 j==i and j=i+1
+        for(int i=size-1; i>=0; --i) {
+            for(int j=i; j<size; ++j) {
+                f[i][j] = (s[i] == s[j]) && (j-i < 2 || f[i+1][j-1]);
+                if (f[i][j] && (j-i+1) > maxLen) {
+                    maxLen = j-i+1;
+                    idx = i;
                 }
             }
         }
