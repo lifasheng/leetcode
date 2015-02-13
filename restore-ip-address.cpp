@@ -22,7 +22,7 @@ public:
             num = num * 10 + (s[i] - '0');
             
             if (num <= 255) {
-                path += s[i];
+                path += s[i]; // 注意，这里path必须累加，而且dfs递归之后，不用执行撤销动作!!!
                 dfs(s, path+'.', i+1, step+1, result);
             }
             
