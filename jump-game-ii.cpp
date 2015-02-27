@@ -6,6 +6,10 @@ public:
 /*
 http://www.cnblogs.com/TenosDoIt/p/3719630.html
 http://www.cnblogs.com/lichen782/p/leetcode_Jump_Game_II.html
+cur表示在result+1步范围内所能到达的最远位置;
+last标识当前这一步所能覆盖的范围;
+在当前的覆盖范围内，你不用更新步数， 但需要更新所能到达的最远位置，这样下次一旦超出覆盖范围，
+我们就能知道我们能到达的下一个覆盖范围，并且步数加1。
 */
     int jump(int A[], int n) {
         int result = 0;
