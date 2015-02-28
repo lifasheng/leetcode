@@ -38,6 +38,7 @@ http://blog.csdn.net/abcbc/article/details/8943485
 #endif
 #ifdef M2 // O(n) time, O(n) space
 /*
+http://www.cnblogs.com/lichen782/p/leetcode_Largest_Rectangle_in_Histogram.html
 理解：这个算法有几个地方很巧妙：
 1. height.push_back(0); 使得循环可以统一处理height中所有的高度;
 2. 栈内存储的是高度递增的下标。
