@@ -20,16 +20,12 @@ public:
 #ifdef M2
     vector<int> grayCode(int n) {
         vector<int> result;
-        int size = 1<<n;
-        result.reserve(size);
-        
         result.push_back(0);
-        
-        for (int i=0; i<n; ++i) {
-            int highest_bit = 1 << i;
+        for(int i=0; i<n; ++i) {
+            int highest_bit = 1<<i;
             int cur_size = result.size();
-            for(int i=cur_size-1; i>=0; --i) {
-                result.push_back(highest_bit | result[i]);
+            for(int j=cur_size-1; j>=0; --j) {
+                result.push_back(result[j] | highest_bit);
             }
         }
         
