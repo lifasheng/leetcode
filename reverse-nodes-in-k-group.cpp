@@ -156,5 +156,34 @@ public:
         
         return head2;
     }
+    ListNode *reverseKGroup(ListNode *head, int k) {
+        if (head == NULL || head->next == NULL || k<=1) return head;
+        
+        // find the head of next group
+        ListNode *next_group = head;
+        for(int i=1; i<=k; ++i) {
+            if (next_group) {
+                next_group = next_group->next;
+            }
+            else {
+                return head;
+            }
+        }
+        
+        // reverse the first group that starts from head
+        // 这里采用的是头插法, 注意这种方法的模式很固定。
+        ListNode dummy(-1);
+        dummy.next = head;
+        ListNode *head2 = &dummy, *prev = head2->next, *cur = prev->next;
+        for(int i=1; i<k; ++i) {
+            prev->next = cur->next;
+            cur->next = head2->next;
+            head2->next = cur;
+            cur = prev->next;
+        }
+        prev->next = reverseKGroup(next_group, k);
+        
+        return dummy.next;
+    }
 #endif
 };
