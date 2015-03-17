@@ -54,6 +54,31 @@ public:
         
         return dummy.next;
     }
+    // similar implementation, code is clearer.
+    ListNode *reverseBetween(ListNode *head, int m, int n) {
+        ListNode dummy1(-1);
+        ListNode *prev = &dummy1;
+        prev->next = head;
+        
+        // find the prev node of mth node
+        for(int i=1; i<m; ++i) prev = prev->next;
+        
+        // reverse nodes between m and n, insert them into new list [head2, tail2].
+        // note that tail2 is the mth node, so we just need to take care of head2.
+        ListNode *pm = prev->next;
+        ListNode *head2 = NULL, *tail2 = pm;
+        for(int i=m; i<=n; ++i) {
+            ListNode *next = pm->next;
+            pm->next = head2;
+            head2 = pm;
+            pm = next;
+        }
+        
+        prev->next = head2;
+        tail2->next = pm;
+        
+        return dummy1.next;
+    }
 #endif
 #ifdef M2
 /*
@@ -90,6 +115,31 @@ public:
         }
         
         return dummy.next;
+    }
+    // similar implementation, code is clearer.
+    ListNode *reverseBetween(ListNode *head, int m, int n) {
+        if (!head || m<1 || m>n) return NULL;
+        if (m==n) return head;
+        
+        ListNode dummy1(-1);
+        ListNode *prev = &dummy1;
+        prev->next = head;
+        
+        // find the prev node of mth node
+        for(int i=1; i<m; ++i) prev = prev->next;
+        
+        // reverse nodes between m and n, 头插
+        ListNode *head2 = prev;
+        prev = head2->next;
+        ListNode *cur = prev->next;
+        for(int i=m; i<n; ++i) {
+            prev->next = cur->next;
+            cur->next = head2->next;
+            head2->next = cur;
+            cur = prev->next;
+        }
+        
+        return dummy1.next;
     }
 #endif
 };
