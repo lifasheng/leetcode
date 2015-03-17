@@ -57,6 +57,45 @@ public:
         
         return dummy.next;
     }
+
+    // similar implementation, code is clearer.
+    ListNode *reverseKGroup(ListNode *head, int k) {
+        if (head == NULL || head->next == NULL || k<=1) return head;
+        
+        // get length of list
+        int len=1;
+        ListNode *p = head;
+        while(p->next) {
+            ++len;
+            p = p->next;
+        }
+        
+        if (k>len) return head;
+        
+        // 头插法, head2 + prev + cur
+        ListNode dummy(-1);
+        dummy.next = head;
+        ListNode *head2 = &dummy;
+        ListNode *prev, *cur;
+        
+        for(int group=1; group<=len/k; ++group) {
+            prev = head2->next;
+            cur = prev->next;
+            // reverse current group
+            for(int i=1; i<k; ++i) {
+                prev->next = cur->next;
+                cur->next = head2->next;
+                head2->next = cur;
+                cur = prev->next;
+            }
+            
+            // 更新头插法相应的结点。
+            // 设置下一个group的参考结点
+            // prev在头插法中相当于尾结点, 所以它也是下一个group的参考结点
+            head2 = prev;
+        }
+        return dummy.next;
+    }
 #endif
 #ifdef M2 // 递归版本
 /*
