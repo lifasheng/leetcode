@@ -57,7 +57,6 @@ public:
         
         return dummy.next;
     }
-
     // similar implementation, code is clearer.
     ListNode *reverseKGroup(ListNode *head, int k) {
         if (head == NULL || head->next == NULL || k<=1) return head;
@@ -128,6 +127,34 @@ public:
         }
         
         return prev; // new head of this group
+    }
+    // similar implementation.
+    ListNode *reverseKGroup(ListNode *head, int k) {
+        if (head == NULL || head->next == NULL || k<=1) return head;
+        
+        // find the head of next group
+        ListNode *next_group = head;
+        for(int i=1; i<=k; ++i) {
+            if (next_group) {
+                next_group = next_group->next;
+            }
+            else {
+                return head;
+            }
+        }
+        
+        // reverse the first group that starts from head
+        // 这里采用的不是头插法，而是普通的链表翻转方法，值得注意的是，tail2=head。
+        ListNode *head2 = NULL, *tail2 = head;
+        while(head!=next_group) {
+            ListNode *next = head->next;
+            head->next = head2;
+            head2 = head;
+            head = next;
+        }
+        tail2->next = reverseKGroup(next_group, k);
+        
+        return head2;
     }
 #endif
 };
