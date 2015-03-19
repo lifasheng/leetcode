@@ -35,4 +35,42 @@ test case: ["a", ""], ["", "a*"], ["a", "ab*"], ["a", ".*..a*"]， ["", ".a*"]
             return isMatch(s, p+2);
         }
     }
+
+
+
+/*
+特别注意s=""的情况：
+如果*p == '.',则一定要判断*s != '\0'， 否则["", ".a*"], ["", ".*a"]这些情况下，s+1后会越界;
+"", ""
+"", "a"
+"", "a*"
+*/
+    // similar implementation, The only difference is not using while loop.    
+    bool isMatch(const char *s, const char *p) {
+        if (s == NULL || p == NULL) return false;
+        
+        if (*p == '\0') return *s == '\0';
+        
+        if (*(p+1) != '*') {
+            if (*s == *p || (*p == '.' && *s != '\0')) {
+                return isMatch(s+1, p+1);
+            }
+            else {
+                return false;
+            }
+        }
+        else {
+            if (*s == *p || (*p == '.' && *s != '\0')) {
+                if (isMatch(s, p+2)) {
+                    return true;
+                }
+                else {
+                    return isMatch(s+1, p); // here, we do not use while loop.
+                }
+            }
+            else {
+                return isMatch(s, p+2);
+            }
+        }
+    }
 };
