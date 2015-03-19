@@ -94,3 +94,116 @@ http://www.cnblogs.com/chasuner/p/validNumber.html
         return state == 1 || state == 4 || state == 7 || state == 8;
     }
 };
+
+// my implementation, easy to follow.
+class Solution {
+public:
+/*
+test case:
+"  "   -> false
+"1"    -> true
+"1 "   -> true
+" .1 " -> true
+" 1. " -> true
+" 1 ." -> false
+" .1. " -> false
+" 1e10 " -> true
+" 1.2e-5 " -> true
+" 1e+6 " -> true
+" 8. 4"  -> false
+"-1.e49046 " -> true
+特别需要注意的是：
+1. 小数点可能在数字的前面也可能在后面;
+   所以要用一个计数来判断小数点出现了几次，2次就false;
+2. 数字后面可以是空格，'\0', 小数点或e
+3. 小数点后面可以是空格，'\0'， 数字或e
+4. e前面可以有+/-, e后面必须紧接着数字，
+   其实处理e方式简单，跳过e本身，跳过+/-，接着跳过数字
+*/
+    bool isNumber(string s) {
+        if (s.empty()) return false;
+        
+        const char *p = &s[0];
+        int dotnum = 0; // 判断小数点出现的次数
+        
+        // 最前面可以是空格
+        while(*p && isspace(*p)) ++p;
+        
+        // 空串
+        if (!*p) return false;
+        
+        // 加减号
+        if (*p == '+' || *p == '-') ++p;
+        
+        // +/- 后面可以是小数点
+        if (*p == '.') {
+            ++p;
+            ++dotnum;
+        }
+        
+        // +/-/. 后面必须是数字
+        if (!isdigit(*p)) return false;
+        while(*p && isdigit(*p)) ++p;
+        
+        // 如果数字后面是空格，则后面必须全是空格，如：  " .1  "
+        if (isspace(*p)) {
+            while (*p && isspace(*p)) ++p;
+            return !*p;
+        }
+        // 数字后面是'\0', 如：  "+1"
+        if(!*p) return true;
+        
+        // 此时数字后面必须是小数点或者e
+        if (*p != '.' && *p != 'e') return false;
+        
+        if (*p == 'e') { // 数字后面接e "1e-2"
+            ++p;
+            if (*p == '+' || *p == '-') ++p;
+            
+            // e后面必须是数字
+            if (!*p || !isdigit(*p)) return false;
+            while(*p && isdigit(*p)) ++p;
+        }
+        else { // *p == '.' // 数字后面接.
+            // skip .
+            ++p;
+            ++dotnum;
+            if (dotnum >=2) return false;
+            
+            // 如果小数点后面是空格，则必须全部是空格，如：  " 1.  "
+            if (isspace(*p)) {
+                while (*p && isspace(*p)) ++p;
+                return !*p;
+            }
+            
+            // 小数点后面是'\0'， 如： "1."
+            if (!*p) return true;
+                
+            if (*p == 'e') { // 小数点后面可以接e "1.e+3"
+                ++p;
+                if (*p == '+' || *p == '-') ++p;
+                // e后面必须是数字
+                if (!*p || !isdigit(*p)) return false;
+                while(*p && isdigit(*p)) ++p;
+            }
+            else { // 此时.后面必须是数字 " 1.2 ",
+                if (!isdigit(*p)) return false;
+                while(*p && isdigit(*p)) ++p;
+                
+                // 此时的数字后面只能接e了： " 1.23e-4 "
+                if(*p == 'e') {
+                    ++p;
+                    if (*p == '+' || *p == '-') ++p;
+                    // e后面必须是数字
+                    if (!*p || !isdigit(*p)) return false;
+                    while(*p && isdigit(*p)) ++p;
+                }
+            }
+        }
+        
+        // 最后面也可以是空格
+        while (*p && isspace(*p)) ++p;
+        
+        return !*p;
+    }
+};
