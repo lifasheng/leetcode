@@ -74,6 +74,9 @@ http://www.cnblogs.com/lichen782/p/leetcode_Largest_Rectangle_in_Histogram.html
         所以此时temp对应的直方图是这些直方图的短板，以它作为矩形高度来计算面积时，长度就是它到栈顶所对应的下标之间的距离。
         
         我们就是这样一个一个地计算i之前的直方图的最大面积，直到当前元素i入栈。
+
+ 可以对比trapping rain water，那道题是小于栈顶的元素入栈，因为越小越能盛水，
+ 而本题是大于栈顶的元素入栈，因为越高面积可能就越大。
 */
     int largestRectangleArea(vector<int> &height) {
         stack<int> s;
