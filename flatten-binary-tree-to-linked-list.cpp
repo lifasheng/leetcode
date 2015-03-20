@@ -30,6 +30,23 @@ public:
         root->right = root->left;
         root->left = NULL;
     }
+    // similar with M1, but easy to understand
+    void flatten(TreeNode *root) {
+        if (!root) return;
+        TreeNode *left = root->left;
+        flatten(left);
+        TreeNode *right = root->right;
+        flatten(right);
+        
+        root->left = NULL;
+        root->right = left;
+        TreeNode *p = root;
+        while(p->right) {
+            p = p->right;
+        }
+        
+        p->right = right;
+    }
 #endif
 #ifdef M2 // 递归版2
 /*
@@ -37,6 +54,17 @@ public:
 但是想明白两点就不会晕了：
 (1) 对于NULL结点，flatten之后的结果是tail。
 (2) 对于叶子结点，flatten之后的结果：该结点的右孩子为tail，左孩子为NULL。
+
+理解： 这个方法是对每个结点，先递归处理它的右孩子，
+       再把右孩子当成链表尾部接到左孩子后面，最后把左孩子接到root后面。
+       初始时，尾结点为NULL，这个NULL是整个树的最后一个结点的尾部。
+
+这种递归返回指针的写法有点类似c语言实现AVL树的方式。
+
+这种方法的本质是从链表的尾部往头部处理。
+
+这种方法还可以扩展到将二叉树flatten成一个双向链表(double linked list)。
+flatten成双向链表同样既可以用上面那种直接的递归方法，也可以用这种从尾部往头部处理的方法，经典！
 */
     void flatten(TreeNode *root) {
         flatten(root, NULL);
