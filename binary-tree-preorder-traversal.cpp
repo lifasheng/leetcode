@@ -68,4 +68,34 @@ public:
         return result;
     }
 #endif
+#ifdef M4 //morris
+    vector<int> preorderTraversal(TreeNode *root) {
+        vector<int> result;
+        TreeNode *cur = root, *prev = NULL;
+        while(cur) {
+            if (cur->left == NULL) {
+                result.push_back(cur->val); // here!!!
+                cur = cur->right;
+            }
+            else {
+                prev = cur->left;
+                while(prev->right != NULL && prev->right != cur) {
+                    prev = prev->right;
+                }
+                
+                if (prev->right == NULL) {
+                    prev->right = cur;
+                    result.push_back(cur->val); // and here!!!
+                    cur = cur->left;
+                }
+                else {
+                    prev->right = NULL;
+                    cur = cur->right;
+                }
+            }
+        }
+        
+        return result;
+    }
+#endif
 };
