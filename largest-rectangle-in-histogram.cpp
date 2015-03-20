@@ -3,6 +3,27 @@ public:
 #define M2
 #ifdef M1
 /*
+这道题可以对每个位置，分别扫描它的前面和后面，看哪些元素比它大，这个跨度乘以该位置的高度就是当前的最大面积。
+int largestRectangleArea(vector<int> &height) {
+{
+    const int n = height.size();
+    int result = 0;
+    for(int i=0; i<n; ++i) {
+        int w = 1;
+        for(int j=i-1; j>=0; --j) {
+            if (height[j] > height[i]) ++w;
+            else break;
+        }
+        for(int j=i+1; j<n; ++j) {
+            if (height[j] > height[i]) ++w;
+            else break;
+        }
+        result = max(result, w*height[i]);
+    }
+    return result;
+}
+但是这种向两个方向扫描的方法不如一个方向的好，因为一个方向的比较好优化。
+
 http://blog.csdn.net/abcbc/article/details/8943485
 解法一是穷举法，对于直方图的每一个右边界，穷举所有的左边界。将面积最大的那个值记录下来。
 时间复杂度为O(n^2). 单纯的穷举在LeetCode上面过大集合时会超时。
