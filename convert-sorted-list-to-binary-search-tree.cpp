@@ -44,6 +44,7 @@ public:
 #endif
 #ifdef M2
 // http://articles.leetcode.com/2010/11/convert-sorted-list-to-balanced-binary.html
+// 时间复杂度 O(n),空间复杂度 O(logn)
     TreeNode *sortedListToBST(ListNode *head) {
         if (head == NULL) return NULL;
         if (head->next == NULL) return new TreeNode(head->val);
