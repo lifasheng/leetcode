@@ -85,48 +85,40 @@ public:
 // 这种方法充分利用了next指针。
     void connect(TreeLinkNode *root) {
         if (!root) return;
-
         TreeLinkNode dummy(-1);
         TreeLinkNode *prev = &dummy;
-
         for(TreeLinkNode *cur = root; cur; cur = cur->next) {
             if (cur->left) {
                 prev->next = cur->left;
                 prev = prev->next;
             }
-
             if (cur->right) {
                 prev->next = cur->right;
                 prev = prev->next;
             }
         }
-
         connect(dummy.next);
     }
 #endif
 #ifdef M4 // 迭代版, 也是一层一层地处理
-// 和M3中的递版本很类似，只是用next取代了递归而已。
+// 和M3中的递版本很类似
     void connect(TreeLinkNode *root) {
         if (!root) return;
-
-        while (root) {
+        
+        while(root) {
             TreeLinkNode dummy(-1);
             TreeLinkNode *prev = &dummy;
-            TreeLinkNode *next = NULL;
-            for(TreeLinkNode *cur = root; cur; cur = cur->next) {
+            for(TreeLinkNode *cur = root; cur; cur=cur->next) {
                 if (cur->left) {
                     prev->next = cur->left;
                     prev = prev->next;
-                    if (!next) next = cur->left;
                 }
-
                 if (cur->right) {
                     prev->next = cur->right;
                     prev = prev->next;
-                    if (!next) next = cur->right;
                 }
             }
-            root = next;
+            root = dummy.next;
         }
     }
 #endif
