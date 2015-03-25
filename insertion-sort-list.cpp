@@ -36,4 +36,24 @@ public:
         
         return dummy.next;
     }
+    // similar implementation, code is clearer.
+    ListNode *insertionSortList(ListNode *head) {
+        if (head == NULL || head->next == NULL) return head;
+        
+        ListNode dummy(-1);
+        ListNode *p = head;
+        while(p) {
+            ListNode *pnext = p->next;
+            
+            ListNode *prev = &dummy;
+            while(prev->next) {
+                if (prev->next->val < p->val) prev = prev->next;
+                else break;
+            }
+            p->next = prev->next;
+            prev->next = p;
+            p = pnext;
+        }
+        return dummy.next;
+    }
 };
