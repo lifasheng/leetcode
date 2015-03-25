@@ -85,5 +85,22 @@ i从0到blue index扫描，
         mypartition(mypartition(A, A+n, bind1st(equal_to<int>(), 0)), 
             A+n, bind1st(equal_to<int>(), 1));
     }
+
+    // rewrite mypartition
+    template <class ForwardIterator, class UnaryPredicate>
+    ForwardIterator mypartition(ForwardIterator first, ForwardIterator last, UnaryPredicate pred) {
+        ForwardIterator pos = first;
+        while(first != last) {
+            if (pred(*first)) {
+                swap(*pos, *first);
+                ++pos;
+            }
+            ++first;
+        }
+        return pos;
+    }
+    void sortColors(int A[], int n) {
+        mypartition(mypartition(A, A+n, [](int i){return i==0;}), A+n, [](int j){return j==1;});
+    }
 #endif
 };
