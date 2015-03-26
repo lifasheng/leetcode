@@ -65,3 +65,33 @@ public:
         }
     }
 };
+
+// rewrite search for a range.
+class Solution {
+public:
+    template <typename FI, typename T>
+    FI lower_bound(FI first, FI last, const T &val) {
+        while (first < last) {
+            FI mid = next(first,  distance(first, last)/2);
+            if (*mid < val) first = next(mid);
+            else last = mid;
+        }
+        return first;
+    }
+    template <typename FI, typename T>
+    FI upper_bound(FI first, FI last, const T &val) {
+        while (first < last) {
+            FI mid = next(first,  distance(first, last)/2);
+            if (*mid <= val) first = next(mid);
+            else last = mid;
+        }
+        return first;
+    }
+    vector<int> searchRange(int A[], int n, int target) {
+        if (!A || n<=0) return {-1, -1};
+        int *lb = lower_bound(A, A+n, target);
+        int *ub = upper_bound(A, A+n, target);
+        if (lb == A+n || *lb !=target) return {-1, -1};
+        return {distance(A, lb), distance(A, prev(ub))};
+    }
+};
