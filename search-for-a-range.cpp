@@ -91,6 +91,8 @@ public:
         if (!A || n<=0) return {-1, -1};
         int *lb = lower_bound(A, A+n, target);
         int *ub = upper_bound(A, A+n, target);
+        // lb == A+n 表示所有的数都小于target;
+        // *lb != target 表示所有的数都大于target, 此时lb == A, 但不能用lb == A,因为这会排除A[0]==target的情况。
         if (lb == A+n || *lb !=target) return {-1, -1};
         return {distance(A, lb), distance(A, prev(ub))};
     }
