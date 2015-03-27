@@ -88,6 +88,26 @@ public:
             result.push_back(v2);
         }
     }
+
+    // 迭代版， 更紧凑。 
+    vector<vector<int> > permute(vector<int> &num) {
+        sort(num.begin(), num.end());
+        
+        vector<vector<int> > result(1);
+        for(int i=0; i<num.size(); ++i) {
+            const int n = result.size();
+            vector<vector<int> > temp; // 保存中间结果
+            for(int j=0; j<n; ++j) {
+                for(int k=0; k<=result[j].size(); ++k) {
+                    vector<int> v = result[j];
+                    v.insert(next(v.begin(),k), num[i]);
+                    temp.push_back(v);
+                }
+            }
+            result = temp;
+        }
+        return result;
+    }
 #endif
 #ifdef M3
 /*
