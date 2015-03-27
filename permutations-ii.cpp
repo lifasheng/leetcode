@@ -54,6 +54,9 @@ public:
 注意，这种解法是通过固定前面的元素，让后面的元素进行全排列，所以将num[start]和num[i]交换后得到的排列集合和将num[start]和num[j]交换后得到的排列集合
 可能顺序不一样，但集合元素是一样的，从而会产生重复。
 test case: [1 1 4] [1 4 4] [1 1 4 4]
+
+!!! 需要理解的是，我们不能以为i==start || num[i] != num[i-1]这个可以代替canSwap里面的逻辑。
+比如 [0 0 0 1 9]，这个要跟起来确实很费劲，有时间再跟一下。 
 */
     vector<vector<int> > permuteUnique(vector<int> &num) {
         vector<vector<int> > result;
