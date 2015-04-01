@@ -118,3 +118,79 @@ http://www.cnblogs.com/TenosDoIt/p/3443512.html
         path.pop_back();
     }
 };
+
+// rewrite word ladder ii.
+ass Solution {
+public:
+    vector<vector<string>> findLadders(string start, string end, unordered_set<string> &dict) {
+        unordered_map<string, bool> visited;
+        unordered_map<string, vector<string> > parent;
+        queue<string> cur;
+        unordered_set<string> next;
+        bool found = false;
+        
+        visited[start] = true;
+        cur.push(start);
+        while(!cur.empty()) {
+            while(!cur.empty()) {
+                string s = cur.front();
+                cur.pop();
+                
+                if (s == end) found = true;
+                
+                vector<string> exts = extend(s, dict, visited);
+                for(auto ext: exts) {
+                    next.insert(ext);
+                    parent[ext].push_back(s);
+                }
+            }
+            if (found) break;
+            
+            for(auto n: next) {
+                visited[n] = true;
+                cur.push(n);
+            }
+            next.clear();
+        }
+        
+        vector<vector<string> > result;
+        vector<string> path;
+        if (found)
+        dfs(end, start, parent, path, result);
+        return result;
+    }
+    
+    vector<string> extend(string &s, unordered_set<string> &dict, unordered_map<string, bool> &visited) {
+        vector<string> result;
+        for(int i=0; i<s.size(); ++i) {
+            for(char j='a'; j<='z'; ++j) {
+                if (s[i] != j) {
+                    swap(s[i], j);
+                    if (dict.count(s) > 0 && !visited[s]) {
+                        result.push_back(s);
+                    }
+                    swap(s[i], j);
+                }
+            }
+        }
+        return result;
+    }
+    
+    void dfs(string &start, string &end, unordered_map<string, vector<string> > &parent, 
+    vector<string> &path, vector<vector<string> > &result) {
+        if (start == end) {
+            path.push_back(end);
+            vector<string> p2(path);
+            reverse(p2.begin(), p2.end());
+            result.push_back(p2);
+            path.pop_back();
+            return;
+        }
+        
+        path.push_back(start);
+        for(auto p: parent[start]) {
+            dfs(p, end, parent, path, result);
+        }
+        path.pop_back();
+    }
+};
