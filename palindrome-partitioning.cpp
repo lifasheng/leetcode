@@ -42,3 +42,39 @@ So the problem is quite clear, when we do recursion, two things should be consid
         return true;
     }
 };
+
+
+class Solution {
+public:
+    vector<vector<string> > partition(string s) {
+        const int n = s.size();
+        vector<vector<string> > result;
+        vector<string> path;
+        bool f[n][n];
+        fill_n(&f[0][0], n*n, false);
+        for(int i=n-1; i>=0; --i) {
+            for(int j=i; j<n; ++j) {
+                f[i][j] = (s[i] == s[j]) && ((j-i<2) || f[i+1][j-1]);
+            }
+        }
+        
+        dfs(s, 0, path, result, &f[0][0]);
+        return result;
+    }
+    
+    void dfs(string &s, int start, vector<string> &path, vector<vector<string> > &result, bool *f) {
+        const int n = s.size();
+        if (start == n) {
+            result.push_back(path);
+            return;
+        }
+        
+        for(int i=start; i<n; ++i) {
+            if (f[start*n+i]) {
+                path.push_back(s.substr(start, i-start+1));
+                dfs(s, i+1, path, result, f);
+                path.pop_back();
+            }
+        }
+    }
+};
