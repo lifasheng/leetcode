@@ -58,3 +58,33 @@ f(i) = min [  f(j)+1,  j=0..i-1   and str[j:i] is palindrome
         return res[n-1];
     }
 };
+class Solution {
+public:
+    int minCut(string s) {
+        const int n = s.size();
+        bool f[n][n];
+        fill_n(&f[0][0], n*n, false);
+        for(int i=n-1; i>=0; --i) {
+            for(int j=i; j<n; ++j) {
+                f[i][j] = s[i] == s[j] && ((j-i<2) || f[i+1][j-1]);
+            }
+        }
+        
+        int cut[n];
+        fill_n(cut, n, INT_MAX);
+        for(int i=0; i<n; ++i) {
+            if(f[0][i]) {
+                cut[i] = 0;
+            }
+            else {
+                for(int k=i-1; k>=0; --k) {
+                    if (f[k+1][i]) {
+                        cut[i] = min(cut[i], cut[k]+1);
+                    }
+                }
+            }
+        }
+        
+        return cut[n-1];
+    }
+};
