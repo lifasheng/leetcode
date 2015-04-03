@@ -34,3 +34,29 @@ public:
         }
     }
 };
+
+// similar implementation.
+class Solution {
+public:
+    vector<vector<int> > combinationSum2(vector<int> &num, int target) {
+        vector<vector<int> > result;
+        vector<int> path;
+        sort(num.begin(), num.end());
+        dfs(num, target, 0, path, result);
+        return result;
+    }
+    void dfs(vector<int>&num, int gap, int start, vector<int> &path, vector<vector<int> > &result) {
+        if (gap == 0) {
+            result.push_back(path);
+            return;
+        }
+        
+        for(int i=start; i<num.size(); ++i) {
+            if (gap < num[i]) break;
+            if (i>start && num[i] == num[i-1]) continue;
+            path.push_back(num[i]);
+            dfs(num, gap-num[i], i+1, path, result);
+            path.pop_back();
+        }
+    }
+};
