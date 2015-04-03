@@ -35,11 +35,7 @@ private:
             vector<string> solution;
             for(int i=0; i<n; ++i) {
                 string s(n, '.');
-                for(int j=0; j<n; ++j) {
-                    if (j == C[i]) {
-                        s[j] = 'Q';
-                    }
-                }
+                s[C[i]] = 'Q';
                 solution.push_back(s);
             }
             result.push_back(solution);
@@ -90,11 +86,7 @@ private:
             vector<string> solution;
             for(int i=0; i<n; ++i) {
                 string s(n, '.');
-                for(int j=0; j<n; ++j) {
-                    if (C[i] == j) {
-                        s[j] = 'Q';
-                    }
-                }
+                s[C[i]] = 'Q';
                 solution.push_back(s);
             }
             result.push_back(solution);
