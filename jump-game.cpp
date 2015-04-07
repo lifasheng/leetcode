@@ -31,3 +31,22 @@ DP，设状态为f(i), 表示第i层剩余的步数。
     }
 #endif
 };
+class Solution {
+public:
+// DP, f(i)表示从第i个位置所能到达的最远距离。
+// 当i<n-1是，如果f[i]<=i，则说明到不了最后一个位置。
+    bool canJump(int A[], int n) {
+        if (n<=0) return false;
+        vector<int> f(n);
+        for(int i=0; i<n-1; ++i) {
+            if (i==0) {
+                f[i] = A[i];
+            }
+            else {
+                f[i] = max(A[i]+i, f[i-1]);
+            }
+            if (i<n-1 && f[i] <= i) return false;
+        }
+        return true;
+    }
+};
