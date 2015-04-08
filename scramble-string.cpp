@@ -145,6 +145,11 @@ DP:
 则状态转移方程为:
 f[n][i][j]} = (f[k][i][j] && f[n-k][i+k][j+k]) 
            || (f[k][i][j+n-k] && f[n-k][i+k][j])
+
+
+注意：代码中是如何初始化f[1][i][j]的。
+这种初始化可以通过观察状态转移方程来找到规律，
+在方程中，对于n==1的情况，是没法处理的，所以要想到这是一种基本情况，要提前处理。
 */
     bool isScramble(string s1, string s2) {
         if (s1.size() != s2.size()) return false;
