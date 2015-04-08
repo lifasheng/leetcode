@@ -13,6 +13,11 @@ f为：
 1 1 0 0 0 
 1 1 1 1 0 
 0 1 0 1 1
+
+
+注意：代码中是如何初始化f[i][0]和f[0][j]的。
+观察状态转移方程可以看出，该方程对于i==0或j==0的情况是没法处理的，
+所以要想到将其作为基本情况提前进行处理。
 */
     bool isInterleave(string s1, string s2, string s3) {
         if (s1.size() + s2.size() != s3.size()) return false;
