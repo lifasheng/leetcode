@@ -20,6 +20,7 @@ public:
                 if (dict.find(ts) != dict.end() && f[j]) {
                     f[i] = true;
                     prev[i][j] = true;
+                    // 注意：这里不能break 提前跳出循环，不然只能找到一种解。
                 }
             }
         }
