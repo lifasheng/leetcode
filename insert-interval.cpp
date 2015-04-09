@@ -133,28 +133,33 @@ binarySearch:
     }
 #endif
 };
-
 class Solution {
 public:
 /*
-如果用网上的代码，O(n) 超时。
+如果用网上的代码，最好的情况是直接插入，不用合并，O(n)，
+最坏的情况是待插入的Interval横跨所有的Intervals，O(n2)，因为erase时需要拷贝数组元素，所以会超时。
 原来自己也写过一个用二分查找的方法，但现在觉得那个代码要判断的条件太多了。
 这种代码自己平时有时间是可以写出来的，但是需要一些调试才能保证正确性。
 于是再次思考，觉得应该有更好的写法，因此有了以下代码。
 这个代码思路清晰，简洁，不容易出错，给别人解释也比较容易。
-最坏情况，待插入的Interval横跨头和尾，则删除需要O(n)，一般情况是O(logn)。
-这种实现需要O(n)的空间。
+空间复杂度： 这种实现需要O(n)的空间。
+时间复杂度：
+构造vector<int>， O(n)
+binary search： O(logn);
+insert: 最坏是在头部插入O(n)，最好是在尾部插入，O(1)，平均是O(n);
+distance: O(1), 注意insert时如果用list插入效率高，但是distance就得O(n)了;
+构造vector<Interval> O(n)
+所以最坏情况也是O(n)的时间复杂度。
 原理：
 1. 先用一个int数组保存Interval中的数，由于已经排序，所以可以用binary search。
    理解STL中的lower_bound很重要，经典代码不多说。
 2. 找到合适的插入位置之后，分别插入newInterval的start和end，得到他们插入之后的位置。
 3. 第一个位置应该在某个Interval的左边，第二个位置则需要在某个Interval的右边，如果不是则需要调整这两个位置。
-4. 这两个位置之间的元素都需要去掉，其它的元素保留。
-5. 再将剩下的有效元素重新填到Interval数组中去即可。
-对于相同元素的处理：
-Input:  [[1,5]], [0,1]
-Output: [[0,1],[1,5]]
-Expected:   [[0,5]]
+    在处理第二个位置时，对于相同元素要进一步处理：
+    Input:  [[1,5]], [0,1]
+    Output: [[0,1],[1,5]]
+    Expected:   [[0,5]]
+4. 这两个位置之间的元素都需要去掉，其它的元素保留， 所以只需将有效元素重新填到Interval数组中去即可。
 */
     // lower_bound 返回大于等于val的第一个位置
     template <typename FI, typename T>
@@ -173,7 +178,7 @@ Expected:   [[0,5]]
             v2.push_back(i.end);
         }
         
-        auto pos1 = lower_bound(v2.begin(), v2.end(), newInterval.start);
+        auto pos1 = lower_bound(v2.begin(), v2.end(), newInterval.start); 
         pos1 = v2.insert(pos1, newInterval.start); //  插入后返回所插入元素的实际位置
         int idx1 = distance(v2.begin(), pos1); // !!! 这里必须先算出idx1,不然在下面插入newInterval.end后pos1可能会失效。
         
@@ -188,16 +193,11 @@ Expected:   [[0,5]]
         // 进一步合并相同的元素,如[[1,5],插入[0,1]后，[0, 1][1,5] => [0,5]
         if (idx2+1 < v2.size() && v2[idx2] == v2[idx2+1]) idx2+=2;
         
-        int total = v2.size() - (idx2-idx1+1) + 2; // 去掉idx1和idx2中间的元素之后的元素数目。
-        for(int i=idx2; i<v2.size(); ++i) { // 从后往前拷贝来删除idx1和idx2之间的元素
-            v2[++idx1] = v2[i];
-        }
-        
         // 将有效元素填入Interval数组中。
         vector<Interval> result;
-        for(int i=0; i<total; i+=2) {
-            result.push_back({v2[i], v2[i+1]});
-        }
+        for(int i=0; i<idx1; i+=2) result.push_back({v2[i], v2[i+1]});
+        result.push_back({v2[idx1], v2[idx2]});
+        for(int i=idx2+1; i<v2.size(); i+=2) result.push_back({v2[i], v2[i+1]});
         
         return result;
     }
