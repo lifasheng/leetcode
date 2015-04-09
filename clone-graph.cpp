@@ -6,49 +6,7 @@
  *     UndirectedGraphNode(int x) : label(x) {};
  * };
  */
-// bfs
-class Solution {
-public:
-    UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
-        if (!node) return node;
-        
-        unordered_map<UndirectedGraphNode*, UndirectedGraphNode*> m;
-        unordered_set<UndirectedGraphNode*> s;
-        queue<UndirectedGraphNode*> q;
-        q.push(node);
-        while(!q.empty()) {
-            UndirectedGraphNode *n = q.front();
-            q.pop();
-            
-            if (s.find(n) == s.end()) {
-                s.insert(n);
-                m[n] = new UndirectedGraphNode(n->label);
-                for(auto neib: n->neighbors) {
-                    q.push(neib);
-                }
-            }
-        }
-        
-        s.clear();
-        q.push(node);
-        while(!q.empty()) {
-            UndirectedGraphNode *n = q.front();
-            q.pop();
-            
-            if (s.find(n) == s.end()) {
-                s.insert(n);
-                UndirectedGraphNode *n2 = m[n];
-                for(auto neib: n->neighbors) {
-                    q.push(neib);
-                    (n2->neighbors).push_back(m[neib]);
-                }
-            }
-        }
-        
-        return m[node];
-    }
-};
-// dfs
+// dfs, 类似于二叉数的递归。
 class Solution {
 public:
     UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
@@ -70,6 +28,8 @@ public:
 };
 
 // bfs
+// 对于在map中存在的结点，它肯定已经被访问过了，所以不用再加入队列了。
+// 而在队列中的结点，肯定是已经clone过了，所以只需要处理它的邻居就行了。
 class Solution {
 public:
     UndirectedGraphNode *cloneGraph(UndirectedGraphNode *node) {
