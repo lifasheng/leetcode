@@ -73,4 +73,6 @@ int main() {
     N = 4;
     myNum = 4;
     assert(s.guessNumber(N) == myNum);
+
+    return 0;
 }
