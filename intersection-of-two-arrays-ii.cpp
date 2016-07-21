@@ -24,6 +24,10 @@ using namespace std;
  *              What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
  *
 */
+
+#define USE_SORTING
+
+#ifdef USE_MAP
 class Solution {
 public:
     vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
@@ -41,6 +45,36 @@ public:
         return result;
     }
 };
+#endif
+
+#ifdef USE_SORTING
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> result;
+        sort(nums1.begin(), nums1.end());
+        sort(nums2.begin(), nums2.end());
+        auto iter1 = nums1.begin();
+        auto iter2 = nums2.begin();
+        while(iter1 != nums1.end() && iter2 != nums2.end()) {
+            if (*iter1 < *iter2) {
+                ++iter1;
+            }
+            else if (*iter1 > *iter2) {
+                ++iter2;
+            }
+            else {
+                result.push_back(*iter1);
+                // do not forget to move forward for both
+                ++iter1;
+                ++iter2;
+            }
+        }
+
+        return result;
+    }
+};
+#endif
 
 
 int main() {
