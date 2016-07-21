@@ -50,21 +50,34 @@ public:
 #endif
 };
 
+int subtract(int a,int b) {
+    /*
+    if(b == 0) return a;
+    return subtract(a^b, (~a & b)<<1);
+    */
+    Solution s;
+    return s.getSum(s.getSum(a, ~b), 1); // a-b = a+(-b) = a+(~b+1) = (a+~b)+1
+}
+
 int main() {
     Solution s;
     int a, b;
 
     a = 2, b = 6;
     assert(s.getSum(a, b) == (a+b));
+    assert(subtract(a, b) == (a-b));
 
     a = 0, b = 4;
     assert(s.getSum(a, b) == (a+b));
+    assert(subtract(a, b) == (a-b));
 
     a = -1, b = 1;
     assert(s.getSum(a, b) == (a+b));
+    assert(subtract(a, b) == (a-b));
 
     a = -5, b = 4;
     assert(s.getSum(a, b) == (a+b));
+    assert(subtract(a, b) == (a-b));
 
     return 0;
 }
