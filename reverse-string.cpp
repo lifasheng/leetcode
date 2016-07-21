@@ -14,7 +14,7 @@ class Solution {
 public:
     string reverseString(string s) {
         int i=0, j = s.length()-1;
-        while(i <= j ) {
+        while(i < j ) {
             std::swap(s[i], s[j]);
             ++i;
             --j;
