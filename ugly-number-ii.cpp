@@ -54,6 +54,20 @@ public:
 #else
 
 /*
+Hint:
+
+    The naive approach is to call isUgly for every number until you reach the nth one. Most numbers are not ugly. Try to focus your effort on generating only the ugly ones.
+    An ugly number must be multiplied by either 2, 3, or 5 from a smaller ugly number.
+    The key is how to maintain the order of the ugly numbers. Try a similar approach of merging from three sorted lists: L1, L2, and L3.
+    Assume you have Uk, the kth ugly number. Then Uk+1 must be Min(L1 * 2, L2 * 3, L3 * 5).
+
+
+L1: 1*2, 2*2, 3*2, 4*2, 5*2, 6*2, ... , i*2, ...
+L2: 1*3, 2*3, 3*3, 4*3, 5*3, 6*3, ... , j*3, ...
+L3: 1*5, 2*5, 3*5, 4*5, 5*5, 6*5, ... , k*5, ...
+every time we select the smallest in L1,L2,L3 and add it into the vector,for example the smallest is x2(note that x2 is maximal in vector),then we remove the numbers which equals to x2 in L1,L2,L3.
+Next time the number we select must be greater than x2, it can't be in the vector.
+
 We have an array k of first n ugly number. We only know, at the beginning, the first one, which is 1. 
 Then 
 k[1] = min(k[0]*2, k[0]*3, k[0]*5) = min(2, 3, 5). The answer is k[0]*2 = 2. So we move 2's pointer to 1. 
