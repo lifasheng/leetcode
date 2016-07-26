@@ -68,6 +68,9 @@ L3: 1*5, 2*5, 3*5, 4*5, 5*5, 6*5, ... , k*5, ...
 every time we select the smallest in L1,L2,L3 and add it into the vector,for example the smallest is x2(note that x2 is maximal in vector),then we remove the numbers which equals to x2 in L1,L2,L3.
 Next time the number we select must be greater than x2, it can't be in the vector.
 
+注意和用最小堆来合并多个有序链表的区别，在合并链表时，相同元素可以重复，而且顺序无关。
+但是对于丑数来说，不能出现重复的丑数，所以如果用最小堆来辅助生成丑数的话，要注意判断新生成的丑数是否和已经生成的最后一个丑数相同，如果相同，则再循环一次，生成新的丑数。
+
 We have an array k of first n ugly number. We only know, at the beginning, the first one, which is 1. 
 Then 
 k[1] = min(k[0]*2, k[0]*3, k[0]*5) = min(2, 3, 5). The answer is k[0]*2 = 2. So we move 2's pointer to 1. 
