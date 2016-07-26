@@ -38,6 +38,9 @@ public:
 #else
 
 /*
+http://mathworld.wolfram.com/DigitalRoot.html
+The base-10 digital roots of the first few integers are 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, ...
+
 digital root 数根
           |-- 0   if n==0
  dr(n) =  |-- 9   if n!=0 && n%9 ==0 
