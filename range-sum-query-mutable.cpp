@@ -64,6 +64,7 @@ private:
     }
     
     int getSum(SegmentTreeNode *node, int qs, int qe) {
+        if (node == NULL) return 0;
         int beg = node->rangeBegin;
         int end = node->rangeEnd;
         if (qs <= beg && qe >= end) {
