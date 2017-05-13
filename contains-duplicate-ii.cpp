@@ -36,6 +36,10 @@ Explanation: It iterates over the array using a sliding window. The front of the
 The elements within that window are maintained using a set. While adding new element to the set, if add() returns false, it means the element already exists in the set. 
 At that point, we return true. If the control reaches out of for loop, it means that inner return true never executed, meaning no such duplicate element was found.
 
+exmaple：1，2，4，2，5，3， k=2
+只有当i>k时，才有必要从set中删除一个已有元素，当然是删除window中最前面那个元素。
+java中的set.add()会返还true或false，c++中则是返还一个pair，pair.second时true或false。
+
 c++ unordered_set::insert:
 The function returns a pair object whose first element is an iterator pointing either to the newly inserted element in the container or to the element whose key is equivalent, 
 and a bool value indicating whether the element was successfully inserted or not.
