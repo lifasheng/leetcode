@@ -38,3 +38,43 @@ public:
     
 };
 #endif
+
+
+
+/*
+思路：
+统计t中每个字符出现的位置。
+对于s中的字符，判断它是否出现在t中，以及它的位置是否在t对应字符的位置范围中，在的话，记录最小的位置。
+显然，这里判断位置是否在一个范围中很容易，但要找到最小的合适位置就要用到二分查找。
+*/
+#if 1
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        unordered_map<char, vector<int> > m;
+        int pos = 0;
+        for (auto c : t) {
+            m[c].push_back(pos++);
+        }
+
+        pos = -1;
+        for (auto c : s) {
+            if (m.find(c) == m.end()) return false;
+            vector<int> vi = m[c];
+            if (vi.empty()) return false;
+            if (vi[vi.size()-1] <= pos) {
+                return false;
+            } else {
+                for (int i=0; i<vi.size(); ++i) {
+                    if (vi[i] > pos) {
+                        pos = vi[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+};
+#endif
