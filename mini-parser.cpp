@@ -106,15 +106,15 @@ ostream& operator<<(ostream& out, const NestedInteger &ni)
         cout << "[";
         if (!vni.empty()) {
             for (int i=0; i< vni.size()-1; ++i) {
-	        cout << vni[i] << ",";
-	    }
+            cout << vni[i] << ",";
+        }
             cout << vni[vni.size()-1];
         }
         cout << "]";
     }
     return out;
 }
- 
+
  // test case
  /*
  [[1,2],[3,4]]
@@ -125,6 +125,11 @@ ostream& operator<<(ostream& out, const NestedInteger &ni)
  []
  [[]]
  [[],[]]
+
+ 思路：
+ 类似于表达式求值，我们可以用两个堆栈来实现。
+ 将逗号看成和加减乘除类似的运算符，只不过是我们遇到右括号时，必须一次性把同一个括号内的逗号运算符都得弹栈，再把左括号弹栈。
+ 而在计算逗号运算时，需要保证先入栈的在前面，这又要用一个临时栈来辅助。
  */
 class Solution {
 public:
@@ -133,33 +138,39 @@ public:
         stack<NestedInteger> niStk;
         int num = 0;
         bool isNeg = false;
-        bool isNumSet = false;
         for (int i=0; i<s.size(); ++i) {
             char c = s[i];
-            if (isdigit(c)) { // 0-9
-                num = num*10 + c-'0';
-                isNumSet = true;
-            } else if (c == '-') {
+            if (c == '-') {
                 isNeg = true;
-            } else { // no digit
-                if (isNumSet) {
-                    if (isNeg) {
-                        isNeg = false;
-                        num *= -1;
+            }  else if(isdigit(c)) { // 0-9
+                num = num*10 + c-'0';
+                int j=i+1;
+                for (; j<s.size(); ++j) {
+                    if (isdigit(s[j])) {
+                         num = num*10 + s[j]-'0';
+                    } else {
+                        break;
                     }
-                    NestedInteger ni;
-                    ni.setInteger(num);
-                    niStk.push(ni);
-                    num = 0;
-                    isNumSet = false;
                 }
+                i=j-1; // because it will ++i in the for loop
+
+                if (isNeg) {
+                    isNeg = false;
+                    num *= -1;
+                }
+
+                NestedInteger ni(num);
+                niStk.push(ni);
+                num = 0;
+
+            } else { // no digit
                 if (c == '[' || c == ',') {
                     opsStk.push(c);
                 } else if (c == ']') {
                     if (opsStk.top() == '[') {
                         opsStk.pop(); // pop '['
                         NestedInteger ni;
-                        if (s[i-1] != '[' && !niStk.empty()) { // in [] case, no need to pop
+                        if (s[i-1] != '[') { // in [] case, no need to pop
                             NestedInteger ni1 = niStk.top(); niStk.pop();
                             ni.add(ni1);
                         }
@@ -190,31 +201,17 @@ public:
                 }
             }
         }
+
+        return niStk.top();
         
-        if (niStk.empty()) {
-            if (isNumSet) {
-                if (isNeg) {
-                    isNeg = false;
-                    num *= -1;
-                }
-                NestedInteger ni;
-                ni.setInteger(num);
-                num = 0;
-                isNumSet = false;
-                return ni;
-            } else {
-                assert(false);
-            }
-        } else {
-            return niStk.top();
-        }
     }
 };
 
 int main() {
     Solution solution;
-    //cout << solution.deserialize("[1,2,3]") << endl;
-    //cout << solution.deserialize("[]") << endl;
-    //cout << solution.deserialize("[1,[2]]") << endl;
-    //cout << solution.deserialize("[[],[]]") << endl;
+    cout << solution.deserialize("[-1,-2]") << endl;
+    cout << solution.deserialize("[1,2,3]") << endl;
+    cout << solution.deserialize("[]") << endl;
+    cout << solution.deserialize("[1,[2]]") << endl;
+    cout << solution.deserialize("[[],[]]") << endl;
 }
