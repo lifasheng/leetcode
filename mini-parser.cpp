@@ -126,11 +126,14 @@ ostream& operator<<(ostream& out, const NestedInteger &ni)
  [[]]
  [[],[]]
 
+ my solution:
+
  思路：
  类似于表达式求值，我们可以用两个堆栈来实现。
  将逗号看成和加减乘除类似的运算符，只不过是我们遇到右括号时，必须一次性把同一个括号内的逗号运算符都得弹栈，再把左括号弹栈。
  而在计算逗号运算时，需要保证先入栈的在前面，这又要用一个临时栈来辅助。
  */
+#if 0
 class Solution {
 public:
     NestedInteger deserialize(string s) {
@@ -206,6 +209,79 @@ public:
         
     }
 };
+#endif
+
+
+
+// test case
+ /*
+ [[1,2],[3,4]]
+ [[[1],2],3,4]
+ [1,2,3]
+ [[1,2],3]
+ [1,[2,3]]
+ []
+ [[]]
+ [[],[]]
+ 
+ 思路：
+This solution uses a stack to record the NestedInteger's.
+At the very beginning, an empty NestedInteger is placed in the stack. This NestedInteger will be regarded as a list that holds one but only one NestedInteger, which will be returned in the end.
+
+Logic: When encountering '[', the stack has one more element. When encountering ']', the stack has one less element.
+
+Complexities:
+Time: O(n)
+Space: worse-case O(n) (worse case: [1,[2,[3,[....[n-1,[n]]]....])
+ */
+#if 1
+class Solution {
+public:
+    NestedInteger deserialize(string s) {
+        stack<NestedInteger> niStk;
+        niStk.push(NestedInteger()); //初始化时放一个空的NestedInteger会方便后面的处理。
+        
+        int num = 0;
+        bool isNeg = false;
+        for (int i=0; i<s.size(); ++i) {
+            char c = s[i];
+            if (c == '-') {
+                isNeg = true;
+            }  else if(isdigit(c)) { // 0-9
+                num = num*10 + c-'0';
+                int j=i+1;
+                for (; j<s.size(); ++j) {
+                    if (isdigit(s[j])) {
+                         num = num*10 + s[j]-'0';
+                    } else {
+                        break;
+                    }
+                }
+                i=j-1; // because it will ++i in the for loop
+                
+                if (isNeg) {
+                    isNeg = false;
+                    num *= -1;
+                }
+                
+                niStk.top().add(NestedInteger(num));
+                num = 0;
+                
+            } else { // no digit
+                if (c == '[') {
+                    niStk.push(NestedInteger());
+                } else if (c == ']') {
+                    NestedInteger ni = niStk.top(); niStk.pop();
+                    niStk.top().add(ni);
+                } else { // ',' do nothing
+                }
+            }
+        }
+
+        return (niStk.top().getList())[0];
+    }
+};
+#endif
 
 int main() {
     Solution solution;
