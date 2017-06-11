@@ -40,6 +40,26 @@ public:
 #endif
 
 
+// 迭代版本，两个指针。
+#if 1
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        auto ps = s.begin(), pt = t.begin();
+        while (ps != s.end() && pt != t.end()) {
+            if (*ps == *pt) {
+                ++ps;
+            }
+            ++pt;
+        }
+        return ps == s.end();
+    }
+
+};
+#endif
+
+
+
 
 /*
 思路：
@@ -47,7 +67,7 @@ public:
 对于s中的字符，判断它是否出现在t中，以及它的位置是否在t对应字符的位置范围中，在的话，记录最小的位置。
 显然，这里判断位置是否在一个范围中很容易，但要找到最小的合适位置就要用到二分查找。
 
-这种解法适合t不变，而s1,s2,...sk不停来查询的情况。
+这种解法适合t不变，而s1,s2,...sk不停来查询的情况!!!!!!!!!
 
  i.e:
 
