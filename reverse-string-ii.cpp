@@ -21,13 +21,7 @@ public:
         int size = s.size();
         int i=0;
         while(i<size) {
-            int ik = i+k;
-            if (ik >= size) {
-                reverseStr(s, i, size);
-                break;
-            }
-            
-            reverseStr(s, i, ik);
+            reverseStr(s, i, min(size, i+k));
             i += 2*k;
         }
         return s;
@@ -42,6 +36,7 @@ public:
         }
     }
 };
+
 
 int main() {
     Solution s;
