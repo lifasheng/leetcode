@@ -90,6 +90,10 @@ public:
 };
 
 
+/*
+定义状态 f(i,j) 表示区间 [i,j] 之间最小的 cut 数,
+则状态转移方程为 f(i, j) = min {f(i, k) + f(k + 1, j)} , i ≤ k ≤ j, 0 ≤ i ≤ j < n
+*/
 class Solution {
 public:
     int minCut(string s) {
