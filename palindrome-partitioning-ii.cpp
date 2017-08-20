@@ -88,3 +88,58 @@ public:
         return cut[n-1];
     }
 };
+
+
+class Solution {
+public:
+    int minCut(string s) {
+        const size_t n = s.size();
+        if (n<=1) return 0;
+
+        vector<vector<bool> > f(n, vector<bool>(n, false));
+        generateF(s,f);
+
+        map<pair<int, int>, int> m;
+        return minCut(s, f, m, 0, n-1);
+    }
+
+    // 递归处理
+    // 将字符串的每个位置进行切分，然后对子串进行递归调用。
+    // 采用备忘录法来记录已有结果。
+    int minCut(string &s, vector<vector<bool> > &f,
+               map<pair<int, int>, int> &m, int beg, int end) {
+        if (f[beg][end]) return 0;
+        pair<int, int> p = make_pair(beg, end);
+        if (m.find(p) != m.end()) return m[p];
+
+        int cut = s.size();
+        for(int i=beg; i<end; ++i) {
+
+            // 这一步是优化的关键，它节省了很多不必要的调用。否则会超时！
+            // 假设字符串分成ABC三段，一开始是A，BC这种划分，A是一个字符，BC是剩下的字符，A肯定是palindrome。
+            // 而到了AB，C这种划分时，如果AB不是palindrome，则没有必要对AB进行调用，
+            // 因为这种划分不可能比A,BC这种划分的结果更好，最多是相等。
+            if (!f[beg][i]) continue;
+
+            //int c = minCut(s,f,m,beg, i) + minCut(s,f,m,i+1,end)+1;
+            int c1 = 0;//minCut(s,f,m,beg,i);
+            int c2 = minCut(s,f,m,i+1,end);
+            int c = c1+c2+1;
+            if (c<cut) {
+                cut = c;
+                m[p]=c;
+            }
+        }
+        return cut;
+    }
+
+    // 判断从i到j是否是palindrome
+    void generateF(string &s, vector<vector<bool> > &f) {
+        const size_t n = s.size();
+        for(int i=n-1; i>=0; --i) {
+            for (int j=i; j<n; ++j) {
+                f[i][j] = s[i] == s[j] && ( (j-i<2)||f[i+1][j-1] );
+            }
+        }
+    }
+};
