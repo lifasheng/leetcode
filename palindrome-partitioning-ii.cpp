@@ -58,6 +58,22 @@ f(i) = min [  f(j)+1,  j=0..i-1   and str[j:i] is palindrome
         return res[n-1];
     }
 };
+
+/*
+比如，s="eegga"
+i=0,cut(0) = 0 // f[0:0] = true
+i=1,cut(1) = 0 // f[0:1] = true
+i=2,cut(2) = 0? 由于 f[0:2] = false, 所以不成立。
+           = 1 由于f[2:2] = true, 所以是cut(1)+1=1
+           = 2? 由于f[1:2] = false, 此时如果在1这个地方切一刀，并不会减少cut次数，所以没意义。
+注意，这里我们是从后往前考虑的。此时我们考虑ee加入g后的切分情况。
+对于字符串ABC，如果C是palindrome，则可以切分AB+C。
+然后考虑BC是否为palindrome，如果BC不是，则切分成A+BC就没有意义。
+因为这样的切分，它不会减少cut次数，它最后还是要切分成A+B+C，而这在AB+C时已经涵盖了。
+这个理解对于下面的递归方法就有很大的帮助。可以用于优化递归方法，减少递归调用次数。
+
+!!!另外需要注意的是，这里从后往前考虑也能work的原因是，在处理i+1时，i已经被处理过了。
+*/
 class Solution {
 public:
     int minCut(string s) {
@@ -125,6 +141,7 @@ public:
             // 因为这种划分不可能比A,BC这种划分的结果更好，最多是相等。
             if (!f[beg][i]) continue;
 
+            // 如果没有上面那一行的优化， 则下面一行就是原始的递归调用，每次都是分左右两个子串。
             //int c = minCut(s,f,m,beg, i) + minCut(s,f,m,i+1,end)+1;
             int c1 = 0;//minCut(s,f,m,beg,i);
             int c2 = minCut(s,f,m,i+1,end);
