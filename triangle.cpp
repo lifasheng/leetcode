@@ -23,3 +23,26 @@ f(j) = min{ f(j), f(j+1) } + (i, j)
         return f[0];
     }
 };
+
+
+// f[i][j] = min(f[i-1][j-1], f[i-1][j]) + triangle[i][j]
+// f[j] = min(f[j-1], f[j]) + triangle[i][j]
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int n = triangle.size();
+        if (n==0) return 0;
+        vector<int> f(n);
+        f[0] = triangle[0][0];
+        for(int i=1; i<n; ++i) {
+            f[i] = triangle[i][i] + f[i-1]; // j=i;
+
+            for(int j=i-1; j>0; --j) { // 注意这里不能从前往后，因为这样会先改变f[j-1]，则计算f[j]时就不对了。
+                f[j] = triangle[i][j] + min(f[j-1], f[j]);
+            }
+
+            f[0] = triangle[i][0] + f[0]; // j=0;
+        }
+        return *min_element(f.begin(), f.end());
+    }
+};
