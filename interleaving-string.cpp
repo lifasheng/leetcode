@@ -37,3 +37,43 @@ f为：
         return f[n1][n2];
     }
 };
+
+
+
+
+// 递归方法 + 备忘录法
+class Solution {
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+        if (s1.size()+s2.size()!=s3.size()) return false;
+
+        map<pair<int, int>, bool> m;
+        return isInterleave(s1, s2, s3, 0, 0, m);
+    }
+
+    bool isInterleave(string &s1, string &s2, string &s3,
+                     int i1, int i2, map<pair<int, int>, bool> &m) {
+        if (i1 == s1.size()) return s2.substr(i2) == s3.substr(i1+i2);
+        if (i2 == s2.size()) return s1.substr(i1) == s3.substr(i1+i2);
+        if (s1[i1] != s3[i1+i2] && s2[i2] != s3[i1+i2]) return false;
+
+        pair<int, int> p = make_pair(i1, i2);
+        if (m.find(p) != m.end()) return m[p];
+
+        bool b = false;
+        if (s1[i1] != s2[i2]) {
+            if (s1[i1] == s3[i1+i2]) {
+                b = isInterleave(s1, s2, s3, i1+1, i2, m);
+
+            } else {
+                b = isInterleave(s1, s2, s3, i1, i2+1, m);
+            }
+        } else {
+            b = isInterleave(s1, s2, s3, i1+1, i2, m)
+                || isInterleave(s1, s2, s3, i1, i2+1, m);
+        }
+
+        m[p] = b;
+        return b;
+    }
+};
