@@ -182,3 +182,51 @@ f[n][i][j]} = (f[k][i][j] && f[n-k][i+k][j+k])
     }
 #endif
 };
+
+
+/*
+递归+备忘录法
+*/
+class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+        map<string, bool> m;
+        return isScramble(s1, s2, m);
+    }
+
+    bool isScramble(string s1, string s2, map<string, bool> &m) {
+        if (s1.size() != s2.size()) return false;
+        if (s1 == s2) return true;
+
+        // 确保字符是相同的。
+        vector<int> buf(26, 0);
+        for(auto c:s1) { buf[c-'a']++; }
+        for(auto c:s2) { if (--buf[c-'a'] < 0) return false; }
+
+        // 查询备忘录
+        string s3 = s1 + ',' + s2;
+        if (m.find(s3) != m.end()) {
+            return m[s3];
+        }
+
+        // 递归处理
+        // 比如s1 = abb, s2 = bba
+        // 则s2会被切分2次，b+ba, bb+a
+        // 以b+ba为例，s1此时可以被切分成a+bb，ab+b
+        bool b = false;
+        for (int i=0; i<s2.size()-1; ++i) {
+            string s21 = s2.substr(0, i+1);
+            string s22 = s2.substr(i+1);
+            string s11_1 = s1.substr(0, i+1);
+            string s12_1 = s1.substr(i+1);
+            string s11_2 = s1.substr(s1.size()-i-1);
+            string s12_2 = s1.substr(0, s1.size()-i-1);
+            b = ( (isScramble(s11_1, s21, m) && isScramble(s12_1, s22, m)))
+                || ( (isScramble(s11_2, s21, m) && isScramble(s12_2, s22, m)) );
+            if (b) break;
+        }
+
+        m[s3] = b;
+        return b;
+    }
+};
