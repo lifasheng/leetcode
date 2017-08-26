@@ -145,6 +145,7 @@ DP:
 则状态转移方程为:
 f[n][i][j]} = (f[k][i][j] && f[n-k][i+k][j+k]) 
            || (f[k][i][j+n-k] && f[n-k][i+k][j])
+这里的k其实是参考了递归切分的思路。
 
 
 注意：代码中是如何初始化f[1][i][j]的。
@@ -204,6 +205,7 @@ public:
         for(auto c:s2) { if (--buf[c-'a'] < 0) return false; }
 
         // 查询备忘录
+        // 将两个字符串相加是一个不错的方法。
         string s3 = s1 + ',' + s2;
         if (m.find(s3) != m.end()) {
             return m[s3];
