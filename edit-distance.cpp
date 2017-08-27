@@ -84,3 +84,99 @@ convert “Zeil” to “trial”, or “Zei” to “trials”, or “Zei” to
     }
 #endif
 };
+
+
+
+// 递归的另一种写法： 从头往后处理
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        map<string, int> m;
+        return minDistance(word1, word2, m);
+    }
+    int minDistance(string w1, string w2, map<string, int> &m) {
+        const size_t n1 = w1.size();
+        const size_t n2 = w2.size();
+        if (n1==0 || n2==0) return max(n1, n2);
+
+        string w3 = w1+','+w2;
+        if (m.find(w3) != m.end()) return m[w3];
+
+        if (w1[0] == w2[0]) {
+            m[w3] = minDistance(w1.substr(1), w2.substr(1), m);
+        } else {
+            int r = minDistance(w1.substr(1), w2.substr(1), m); // replace
+            int i = minDistance(w1, w2.substr(1), m); // insert
+            int d = minDistance(w1.substr(1), w2, m); // delete
+            m[w3] = min(r, min(i,d))+1;
+        }
+
+        return m[w3];
+    }
+};
+
+
+
+
+
+/*
+动态规划的另一种写法，只是记录一下， 感觉没有上面的方法简洁。
+*/
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        const size_t n1 = word1.size();
+        const size_t n2 = word2.size();
+        if (n1==0 || n2==0) return max(n1,n2);
+
+        int f[n1][n2];
+        fill_n(&f[0][0], n1*n2, 0);
+        f[0][0] = word1[0] == word2[0] ? 0 : 1;
+        // 因为没有考虑空字符串的情况，所以写起来不是很简洁，不过也不难理解。
+        for (int i=1;i<n1;++i) {
+            if(word1[i] == word2[0]) {
+                f[i][0] = i;
+            } else {
+                bool found = false;
+                for(int k=0;k<i;++k) {
+                    if (word1[k] == word2[0]) {
+                        found = true;
+                    }
+                }
+
+                f[i][0] = found? i : i+1;
+            }
+        }
+
+        for (int j=1;j<n2;++j) {
+            if(word1[0] == word2[j]) {
+                f[0][j] = j;
+            } else {
+                bool found = false;
+                for(int k=0;k<j;++k) {
+                    if (word1[0] == word2[k]) {
+                        found = true;
+                    }
+                }
+
+                f[0][j] = found ? j : j+1;
+            }
+        }
+
+        for(int i=1;i<n1;++i) {
+            for(int j=1;j<n2;++j) {
+                if (word1[i] == word2[j]) {
+                    f[i][j] = f[i-1][j-1];
+                }
+                else {
+                    int rep = f[i-1][j-1];
+                    int ins = f[i][j-1];
+                    int del = f[i-1][j];
+                    f[i][j] = min(rep,min(ins,del))+1;
+                }
+            }
+        }
+
+        return f[n1-1][n2-1];
+    }
+};
