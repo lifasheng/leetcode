@@ -99,7 +99,7 @@ DP, 设f(i)表示从i到n-1的decode ways。
 class Solution {
 public:
     // 递归+备忘录法
-    // 测试用例："", "0"，"123", "2745"
+    // 测试用例："", "0"，"10", "100", "101", "123", "2745"
     int numDecodings(string s) {
         // 保存从某个位置到字符串结尾的decode方法个数
         unordered_map<int, int> m;
@@ -125,5 +125,36 @@ public:
             n2 = n-idx>2 ? numDecodings(s, idx+2, m) : 1;
         }
         return m[idx] = n1+n2;
+    }
+};
+
+
+
+
+// 动态规划: 从前往后处理, 可以和上面的从后往前处理对比一下。
+// f[i] 表示从0~i的decode方法数
+// f[i] = (s[i] != '0' ? f[i-1] : 0)
+//      + (s[i-1]!=0 && s[i-1,i] <= 26) ? ( (i>=2) : f[i-2] : 1 ) : 0
+
+// 测试用例："", "0"，"10", "100", 101", 123", "2745"
+class Solution {
+public:
+    int numDecodings(string s) {
+        if (s.empty()) return 0;
+        if (!(s[0] >= '1' && s[0] <='9')) return 0; // '0'开头
+        const size_t n = s.size();
+        vector<int> f(n, 0);
+        f[0] = 1;
+        for(int i=1; i<n; ++i) {
+            if (s[i] != '0') {
+                f[i] = f[i-1];
+            }
+            // 注意 "100" , "101"
+            if (s[i-1] != '0' && atoi(s.substr(i-1,2).c_str()) <= 26) {
+                f[i] += ( (i>=2) ? f[i-2] : 1 );
+            }
+        }
+
+        return f[n-1];
     }
 };
