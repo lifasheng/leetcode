@@ -101,7 +101,7 @@ public:
         
         for(int i=1; i<=m; ++i) {
             for(int j=1; j<=n; ++j) {
-                if (i>=j) {
+                if (i>=j) { // 这个能起到剪枝的效果，因为i<j,肯定为0
                     f[i][j] = f[i-1][j];
                     if (S[i-1] == T[j-1]) f[i][j] += f[i-1][j-1];
                 }
@@ -109,5 +109,68 @@ public:
         }
         
         return f[m][n];
+    }
+};
+
+
+
+
+
+/*
+Given a string S and a string T, count the number of distinct subsequences of S which equals T.
+
+A subsequence of a string is a new string which is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (ie, "ACE" is a subsequence of "ABCDE" while "AEC" is not).
+
+Here is an example:
+S = "rabbbit", T = "rabbit"
+
+Return 3.
+
+
+
+注意： t=""时，结果为1。
+以s="aabc",t="ab"为例。
+看到这种题目，感觉先尝试递归+备忘录法会直观些。
+设f(s,t)表示t为s的不同子串的个数。
+
+f(aabc,ab): s=aabc,t=ab
+	s[0]==t[0], 此时即可以同时删除s和t的首字符，也可以只删除s的首字符：f(aabc,ab)=f(abc,b)+f(abc,ab)
+f(abc,b): s=abc, t=b
+        s[0]!=t[0], 此时只能删除s[0], 并尝试s的下一个位置：f(abc, b)=f(bc,b)
+f(abc,ab): s=abc, t=ab
+        s[0]==t[0], f(abc,ab) = f(bc,b) + f(bc,ab)
+... ...
+从上面可以看出有一些函数调用时重复的，所以可以采用备忘录法。
+
+*/
+
+class Solution {
+public:
+    int numDistinct(string s, string t) {
+        map<pair<int, int>, int> m;
+        return numDistinct(s, t, 0, 0, m);
+    }
+
+    // 递归+备忘录法
+    // 从前往后递归处理， s:[i..ns], t:[j..nt]，递归判断t子串在s子串的个数
+    // i指向s正在处理的子串起始位置，j指向t正在处理的子串起始位置。
+    int numDistinct(string &s, string &t, int i, int j, map<pair<int, int>, int> &m) {
+        const size_t ns = s.size();
+        const size_t nt = t.size();
+        if (ns-i < nt-j) return 0; // s子串比t子串小，显然t的子串不可能是s的子串的子串
+        if (nt-j==0) return 1; // t的子串是空串，则它是任何字符串的子串
+        if ( (ns-i == nt-j) && (s[i] != t[j]) )
+            return 0; // t子串和s子串长度相同，但首字符不同，t子串不可能是s子串的子串。
+
+        pair<int, int> p = make_pair(i,j);
+        if (m.find(p) != m.end()) return m[p];
+
+        int num = 0;
+        if (s[i] == t[j]) {
+            num = numDistinct(s,t,i+1,j+1,m) + numDistinct(s,t,i+1,j,m);
+        } else {
+            num = numDistinct(s,t,i+1,j,m);
+        }
+        return m[p] = num;
     }
 };
