@@ -91,3 +91,39 @@ DP, 设f(i)表示从i到n-1的decode ways。
     }
 #endif
 };
+
+
+
+
+
+class Solution {
+public:
+    // 递归+备忘录法
+    // 测试用例："", "0"，"123", "2745"
+    int numDecodings(string s) {
+        // 保存从某个位置到字符串结尾的decode方法个数
+        unordered_map<int, int> m;
+        return numDecodings(s, 0, m);
+    }
+
+    int numDecodings(string &s, int idx, unordered_map<int, int> &m) {
+        const size_t n = s.size();
+        if (n-idx == 0) return 0; // 空串
+        if (!(s[idx] >= '1' && s[idx] <='9')) return 0; // '0'开头
+        if (n-idx == 1) return 1; // 单个数字
+
+        if (m.find(idx) != m.end()) return m[idx];
+
+        // 切分出一个数字
+        int n1 = numDecodings(s, idx+1, m);
+
+        // 切分出两个数字
+        bool b = atoi(s.substr(idx,2).c_str()) <= 26;
+        int n2 = 0;
+        if (b) {
+            // 如果只剩两个数字，则方法数为1，否则继续递归
+            n2 = n-idx>2 ? numDecodings(s, idx+2, m) : 1;
+        }
+        return m[idx] = n1+n2;
+    }
+};
