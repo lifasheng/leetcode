@@ -62,3 +62,49 @@ public:
     }
 #endif
 };
+
+
+
+
+// test case: -1: false, 101: true, 1001: true, 1010: false, 6: true
+// 思路：
+// 首先判断一个数有多少位，然后类似于string，用两个指针从前后往中间迭代判断是否相等。
+class Solution {
+public:
+    bool isPalindrome(int x) {
+        if (x<0) {
+            return false;
+
+            // if (x == INT_MIN) return false;
+            // return isPalindrome(-x);
+        }
+
+        int m = howManyDigits(x);
+
+        int low = 1, high = m;
+        while (low <= high) {
+            if (getDigit(x, low) != getDigit(x, high)) {
+                return false;
+            }
+            ++low;
+            --high;
+        }
+
+        return true;
+    }
+
+    int getDigit(int x, int i) {
+        int n = pow(10, i-1);
+        x /= n;
+        return x%10;
+    }
+
+    int howManyDigits(int x) {
+        int m=1;
+        while(x>=10) {
+            ++m;
+            x/=10;
+        }
+        return m;
+    }
+};
