@@ -172,3 +172,76 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+////////////////////////////////
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        if (head == NULL || head->next == NULL) return true;
+        ListNode* secondHead = NULL;
+        ListNode* firstTail = NULL;
+
+        splitList(head, secondHead, firstTail);
+        ListNode* reversedSecondHead = reverseList(secondHead);
+
+        ListNode* p1 = head;
+        ListNode* p2 = reversedSecondHead;
+        bool result = true;
+        while(p1 != NULL && p2 != NULL) {
+            if (p1->val != p2->val) {
+                result = false;
+                break;
+            }
+            p1 = p1->next;
+            p2 = p2->next;
+        }
+
+        firstTail->next = reverseList(reversedSecondHead);
+        return result;
+    }
+
+    void splitList(ListNode* head, ListNode* &secondHead, ListNode* &firstTail) {
+        ListNode dummy(-1);
+        dummy.next = head;
+        ListNode* fast = &dummy;
+        ListNode* slow = &dummy;
+        while(fast != NULL && fast->next != NULL) {
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        secondHead = slow->next;
+        firstTail = slow;
+        slow->next = NULL;
+    }
+
+    ListNode* reverseList(ListNode* head) {
+        if (head == NULL || head->next == NULL) return head;
+
+        ListNode* p = NULL;
+        ListNode* cur = head;
+        ListNode* next = NULL;
+        while (cur != NULL) {
+            next = cur->next;
+            cur->next = p;
+            p = cur;
+            cur = next;
+        }
+        return p;
+    }
+};
