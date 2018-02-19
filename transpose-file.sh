@@ -17,6 +17,7 @@ age 21 30
 # Read from the file file.txt and print its transposed content to stdout.
 # NF: number of filed in each row
 # NR: number of record, which line
+# https://www.gnu.org/software/gawk/manual/html_node/Multidimensional.html
 awk '            
 {            
     for (i=1; i<=NF; i++)  {
