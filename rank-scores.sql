@@ -38,8 +38,25 @@ For example, given the above Scores table, your query should generate the follow
 
 # This way of generating auto-increment id column is so cool.
 
+# 1. cross join: https://www.w3resource.com/mysql/advance-query-in-mysql/mysql-cross-join.php
+/*
+mysql> select *  from (select distinct Score from Scores order by Score desc) t cross join (select @cnt := 0) as dummy;
++-------+-----------+
+| Score | @cnt := 0 |
++-------+-----------+
+|  4.00 |         0 |
+|  3.85 |         0 |
+|  3.65 |         0 |
+|  3.50 |         0 |
++-------+-----------+
+4 rows in set (0.01 sec)
+
+*/
+# 2. distinct is important here when generate the intermediate table r.
+
 Select r.Score, r.Rank 
 from Scores s, 
 ( SELECT (@cnt := @cnt + 1) AS  Rank, t.* from (select distinct Score from Scores order by Score desc) t cross join (select @cnt := 0) as dummy ) as r 
 where s.Score = r.Score order by s.Score desc
+
 
