@@ -53,10 +53,11 @@ mysql> select *  from (select distinct Score from Scores order by Score desc) t 
 
 */
 # 2. distinct is important here when generate the intermediate table r.
+# 3. note that both method of temporary table r are same.
 
 Select r.Score, r.Rank 
 from Scores s, 
-( SELECT (@cnt := @cnt + 1) AS  Rank, t.* from (select distinct Score from Scores order by Score desc) t cross join (select @cnt := 0) as dummy ) as r 
+# ( SELECT (@cnt := @cnt + 1) AS  Rank, t.* from (select distinct Score from s order by Score desc) t cross join (select @cnt := 0) as dummy ) as r
+( SELECT @rn := @rn + 1 Rank, a.score from (select distinct score from scores) a, (SELECT @rn := 0) b   ORDER BY  Score desc ) as r
 where s.Score = r.Score order by s.Score desc
-
 
