@@ -19,6 +19,8 @@ mysql> select * from employee;
 +------+-------+--------+--------------+
 6 rows in set (0.00 sec)
 
+# find the 2nd max salary:
+
 mysql> SELECT   departmentId, (   SELECT   salary   FROM     employee t2   WHERE    t2.departmentId = t1.departmentId   ORDER BY salary DESC   LIMIT    1, 1 ) as secondMax FROM     employee t1 GROUP BY departmentId;
 +--------------+-----------+
 | departmentId | secondMax |
