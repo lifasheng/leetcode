@@ -1,0 +1,173 @@
+https://www.careercup.com/question?id=5695046734053376
+
+You are given a graph with no cycles, each node representing different cities and there are stadiums for baseball games in all cities. 
+
+Each node contains a value representing the population of the city, and a list of neighbors. (feel free to extend data structure) 
+
+Every time there is a baseball game at a city, everyone from all the different cities will go to the city with the baseball game. 
+
+Return the maximum traffic between a city and its neighbours when there is a game at that city, for all cities. (Does not have to be sorted) 
+
+The total run-time after returning everything should be O(n). 
+
+Examples:
+
+
+Input:
+1   2
+ \ /
+  5
+ / \
+4   3
+Output:
+1 14
+2 13
+3 12
+4 11
+5 4
+
+Input:
+         38
+         /
+        8
+        /
+      7
+     /
+1   2
+ \ / \
+  5   15
+ / \
+4   3
+Output:
+1 82
+2 53
+3 80
+4 79
+5 70
+7 46
+15 68
+8 38
+38 45
+
+
+
+
+
+import java.util.*;
+
+class Node {
+    private int population;
+    private List<Node> neighbours;
+    private String name;
+    private Map<Node, Integer> trafficMap;  // BR
+
+    public Node(String name, int population) {
+        this.name = name;
+        this.population = population;
+        trafficMap = new HashMap<>();
+        neighbours = new ArrayList<>();
+    }
+
+    public Map<Node, Integer> getTrafficMap() {
+        return trafficMap;
+    }
+
+    public void setTrafficMap(Map<Node, Integer> trafficMap) {
+        this.trafficMap = trafficMap;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
+    }
+
+    public List<Node> getNeighbours() {
+        return neighbours;
+    }
+
+    public void setNeighbours(List<Node> neighbours) {
+        this.neighbours = neighbours;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+}
+
+class FindMaxTraffic {
+    public static int maxTraffic(final Node n) {
+        int maxTraffic = 0;
+        for (final Node neighbour : n.getNeighbours()) {
+            maxTraffic = Math.max(maxTraffic, totalPopulation(neighbour, n));
+        }
+        return maxTraffic;
+    }
+
+    public static int totalPopulation(final Node root, final Node target) {
+        if (target.getTrafficMap().containsKey(root)) {  // BR
+            return target.getTrafficMap().get(root);
+        }
+        //System.out.println(root.getName() + "-->" + target.getName());
+
+        int total = root.getPopulation();
+        for (final Node n : root.getNeighbours()) {
+            if (n != target) {
+                total += totalPopulation(n, root);
+            }
+        }
+
+        target.getTrafficMap().put(root, total); // BR
+
+        return total;
+    }
+}
+
+public class MyTest {
+
+    public static List<Node> testCase() {
+        final Node na = new Node("A", 1);
+        final Node nb = new Node("B", 2);
+        final Node nc = new Node("C", 3);
+        final Node nd = new Node("D", 4);
+        final Node ne = new Node("E", 5);
+        final Node nf = new Node("F", 6);
+
+        final List<Node> lna = Arrays.asList(nc);
+        na.setNeighbours(lna);
+
+        final List<Node> lnb = Arrays.asList(nc);
+        nb.setNeighbours(lnb);
+
+        final List<Node> lnc = Arrays.asList(na, nb, nd);
+        nc.setNeighbours(lnc);
+
+        final List<Node> lnd = Arrays.asList(nc, ne, nf);
+        nd.setNeighbours(lnd);
+
+        final List<Node> lne = Arrays.asList(nd);
+        ne.setNeighbours(lne);
+
+        final List<Node> lnf = Arrays.asList(nd);
+        nf.setNeighbours(lnf);
+
+        final List<Node> allNodes = Arrays.asList(na, nb, nc, nd, ne, nf);
+        return allNodes;
+    }
+
+    public static void main(String[] args) {
+        final List<Node> allNodes = testCase();
+        for (final Node n : allNodes) {
+            System.out.println(FindMaxTraffic.maxTraffic(n));
+        }
+    }
+
+}
+
