@@ -36,3 +36,13 @@ public:
         return pigs;
     }
 };
+
+or:
+
+class Solution {
+public:
+    int poorPigs(int buckets, int minutesToDie, int minutesToTest) {
+        // 5^x = buckets => x = log(buckets)/log(5);
+        return ceil(log(buckets)/log(minutesToTest / minutesToDie + 1));
+    }
+};
