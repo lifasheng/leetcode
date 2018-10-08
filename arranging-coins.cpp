@@ -46,3 +46,20 @@ public:
         return k;
     }
 };
+
+
+
+
+/*
+1+2+...+x = n => x*(1+x)/2 = n
+x^2 + x - 2n = 0
+x = (sqrt(8.0n+1)-1)/2;
+
+https://en.wikipedia.org/wiki/Quadratic_formula
+*/
+class Solution {
+public:
+    int arrangeCoins(int n) {
+        return (sqrt(8.0*n+1)-1)/2;
+    }
+};
