@@ -73,6 +73,27 @@ private:
 
         return area;
     }
+    
+    int dfs(const vector<vector<int>>& grid, int i, int j, vector<vector<bool>> &visited) {
+        if (visited[i][j]) return 0;
+        
+        visited[i][j] = true;
+        
+        int area = 1;
+
+        for(auto d : directions) {
+            int nextI = i+d.first;
+            int nextJ = j+d.second;
+            if (nextI >= 0 && nextI < rows 
+                && nextJ >=0 && nextJ < cols 
+                && grid[nextI][nextJ]
+                && !visited[nextI][nextJ]) {
+                area += dfs(grid, nextI, nextJ, visited);
+            }
+        }
+        
+        return area;
+    }
 public:    
     int maxAreaOfIsland(vector<vector<int>>& grid) {
         rows = grid.size();
@@ -86,7 +107,8 @@ public:
         for (int i=0; i<rows; ++i) {
             for (int j=0; j<cols; ++j) {
                 if (grid[i][j] && !visited[i][j]) {
-                    int area = bfs(grid, i, j, visited);
+                    //int area = bfs(grid, i, j, visited);
+                    int area = dfs(grid, i, j, visited);
                     maxArea = max(area, maxArea);
                 }
             }
