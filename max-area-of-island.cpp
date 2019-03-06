@@ -118,6 +118,96 @@ public:
     }
 };
 
+
+
+// use array instead of vector to improve the latency.
+class Solution {
+private:
+    int rows, cols;
+    const vector<std::pair<int, int> > directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+    int bfs(const vector<vector<int>>& grid, int i, int j, bool *visited) {
+        if (visited[i*cols + j]) return 0;
+
+        std::queue<std::pair<int, int>> q;
+        q.push(make_pair(i, j));
+
+        int area = 0;
+        while(!q.empty()) {
+            std::pair<int, int> p = q.front();
+            q.pop();
+
+            int i = p.first;
+            int j = p.second;
+
+            if (visited[i*cols + j]) continue; // because one point may be added several times to the queue.
+
+            ++area;
+
+            visited[i*cols + j] = true;
+
+            for(auto d : directions) {
+                int nextI = i+d.first;
+                int nextJ = j+d.second;
+                if (nextI >= 0 && nextI < rows 
+                    && nextJ >=0 && nextJ < cols 
+                    && grid[nextI][nextJ]
+                    && !visited[nextI*cols + nextJ]) {
+                    q.push(make_pair(nextI, nextJ));
+                }
+            }
+        }
+
+        return area;
+    }
+    
+    int dfs(const vector<vector<int>>& grid, int i, int j, bool* visited) {
+        if (visited[i*cols + j]) return 0;
+        
+        visited[i*cols + j] = true;
+        
+        int area = 1;
+
+        for(auto d : directions) {
+            int nextI = i+d.first;
+            int nextJ = j+d.second;
+            if (nextI >= 0 && nextI < rows 
+                && nextJ >=0 && nextJ < cols 
+                && grid[nextI][nextJ]
+                && !visited[nextI*cols + nextJ]) {
+                area += dfs(grid, nextI, nextJ, visited);
+            }
+        }
+        
+        return area;
+    }
+public:    
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        rows = grid.size();
+        if (rows == 0) return 0;
+        cols = grid[0].size();
+        if (cols == 0) return 0;
+        
+        bool visited[rows*cols] = {false};
+        
+        int maxArea = 0;
+        for (int i=0; i<rows; ++i) {
+            for (int j=0; j<cols; ++j) {
+                if (grid[i][j] && !visited[i*cols + j]) {
+                    //int area = bfs(grid, i, j, visited);
+                    int area = dfs(grid, i, j, visited);
+                    maxArea = max(area, maxArea);
+                }
+            }
+        }
+        
+        return maxArea;
+    }
+};
+
+
+
+
 int main() {
     Solution s;
     
