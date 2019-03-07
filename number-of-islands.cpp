@@ -94,6 +94,87 @@ public:
 };
 
 
+
+class Solution {
+private:
+    int rows, cols;
+    const vector<std::pair<int, int> > directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+
+    void bfs(const vector<vector<char>>& grid, int i, int j, bool *visited) {
+        if (visited[i*cols + j]) return;
+
+        std::queue<std::pair<int, int>> q;
+        q.push(make_pair(i, j));
+
+        while(!q.empty()) {
+            std::pair<int, int> p = q.front();
+            q.pop();
+
+            int i = p.first;
+            int j = p.second;
+
+            if (visited[i*cols + j]) continue; // because one point may be added several times to the queue.
+
+            visited[i*cols + j] = true;
+
+            for(auto d : directions) {
+                int nextI = i+d.first;
+                int nextJ = j+d.second;
+                if (nextI >= 0 && nextI < rows 
+                    && nextJ >=0 && nextJ < cols 
+                    && grid[nextI][nextJ] == '1' 
+                    && !visited[nextI*cols + nextJ]) {
+                    q.push(make_pair(nextI, nextJ));
+                }
+            }
+        }
+    }
+    
+    void dfs(const vector<vector<char>>& grid, int i, int j, bool *visited) {
+        if (visited[i*cols + j]) return;
+        
+        visited[i*cols + j] = true;
+        
+        for(auto d : directions) {
+            int nextI = i+d.first;
+            int nextJ = j+d.second;
+            if (nextI >= 0 && nextI < rows 
+                && nextJ >=0 && nextJ < cols 
+                && grid[nextI][nextJ] == '1' 
+                && !visited[nextI*cols + nextJ]) {
+                dfs(grid, nextI, nextJ, visited);
+            }
+        }
+    }
+    
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        rows = grid.size();
+        if (rows == 0) return 0;
+        cols = grid[0].size();
+        if (cols == 0) return 0;
+        
+        //vector<vector<bool>> visited(rows, vector<bool>(cols, false));
+        bool visited[rows*cols];
+        fill_n(&visited[0], rows*cols, false);
+        
+        int numberOfIsland = 0;
+        for (int i=0; i<rows; ++i) {
+            for (int j=0; j<cols; ++j) {
+                if (grid[i][j] == '1' && !visited[i*cols+ j]) {
+                     //bfs(grid, i, j, visited);
+                    dfs(grid, i, j, visited);
+                    ++ numberOfIsland;
+                }
+            }
+        }
+        
+        return numberOfIsland;
+    }
+
+};
+
+
 int main() {
     Solution s;
     
