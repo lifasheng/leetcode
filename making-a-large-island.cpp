@@ -42,6 +42,33 @@ Notes:
 #include <sstream>
 using namespace std;
 
+/*
+
+Basic idea:
+
+We use a map to maintain below mapping:
+- key : water (0) position;
+- value: the adjacent island list(or set, in order to avoid duplicate)
+
+The problem is how can we represent an island?
+Especially in dfs, the island may grow later when we meet the 0.
+
+We can use a pointer of set to represent an island, the set contains the lands' position.
+
+
+In dfs:
+when we start a new dfs, which means a new island is started.
+so each 1 will be added to the island set, and each 0 will add its adjacent island's pointer (of set) to the list.
+
+In bfs:
+we can use same idea as dfs above.
+
+But bfs can be simpler because we know when the island is reached, so we can kind of give the island a number, instead of a set to identify it.
+
+
+
+*/
+
 class Solution {
 private:
     int rows, cols;
