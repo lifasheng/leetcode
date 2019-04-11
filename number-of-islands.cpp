@@ -187,3 +187,35 @@ int main() {
  
     return 0;
 }
+
+
+
+#========================
+# python implementation
+#========================
+
+class Solution(object):
+    def dfs(self, grid, i, j, spotted):
+        spotted.add( (i,j) )
+        if i-1 >= 0 and grid[i-1][j] == '1' and (i-1, j) not in spotted:
+            self.dfs(grid, i-1, j, spotted)
+        if i+1 < len(grid) and grid[i+1][j] == '1' and (i+1, j) not in spotted:
+            self.dfs(grid, i+1, j, spotted)
+        if j-1 >= 0 and grid[i][j-1] == '1' and (i, j-1) not in spotted:
+            self.dfs(grid, i, j-1, spotted)
+        if j+1 < len(grid[0]) and grid[i][j+1] == '1' and (i, j+1) not in spotted:
+            self.dfs(grid, i, j+1, spotted)
+
+    def numIslands(self, grid):
+        counter = 0
+        spotted = set()
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == '1' and (i, j) not in spotted:
+                    self.dfs(grid, i, j, spotted)
+                    counter += 1
+        return counter
+
+
+
+
