@@ -6,6 +6,9 @@ https://practice.geeksforgeeks.org/problems/min-distance-between-two-given-nodes
 
 Min distance between two given nodes of a Binary Tree
 
+Given a binary tree and two node values your task is to find the minimum distance between them.
+Distance between two nodes is the minimum number of edges to be traversed to reach one node from other.
+
 */
 
 
