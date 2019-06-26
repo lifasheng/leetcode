@@ -110,41 +110,38 @@ public:
     }
 };
 */
+
+// we go through the whole graph and clone the node first;
+// we use a map to save the cloned node, it also helps to avoid accessing a node again if it has been accessed.
+// after we cloned, we connect the cloned nodes according to original graph connection.
 class Solution {
 public:
     Node* cloneGraph(Node* node) {
         if (node == NULL) return NULL;
         
         unordered_map<Node*, Node*> m;
+        find_all_nodes_and_clone(node, m);
+        connect_cloned_nodes(m);
         
-        find_all_nodes(node, m);
-        
-        return cloneGraph(node, m);
+        return m[node];
     }
     
-    void find_all_nodes(Node* node, unordered_map<Node*, Node*> &m) {
-        if (node == NULL) return;
-        
+    // recursively clone each node
+    void find_all_nodes_and_clone(Node* node, unordered_map<Node*, Node*> &m) {        
         if (m.find(node) != m.end()) return;
         
-        m[node] = NULL;
+        m[node] = new Node(node->val, vector<Node*>());
         for (auto neighbor : node->neighbors) {
-            find_all_nodes(neighbor, m);
+            find_all_nodes_and_clone(neighbor, m);
         }
     }
     
-    Node* cloneGraph(Node* node, unordered_map<Node*, Node*> &m) {
-        for (auto entry : m) {
-            Node* node = entry.first;
-            m[node] = new Node(node->val, vector<Node*>());
-        }
-        
+    void connect_cloned_nodes(unordered_map<Node*, Node*> &m) {
         for (auto entry : m) {
             Node* node = entry.first;
             for (auto neighbor: node->neighbors) {
                 m[node]->neighbors.push_back(m[neighbor]);
             }
         }
-        return m[node];
     }
 };
