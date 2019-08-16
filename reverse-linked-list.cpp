@@ -93,3 +93,41 @@ public:
     }
     #endif
 };
+
+
+
+
+//////////////////////////
+
+/*
+https://practice.geeksforgeeks.org/problems/reverse-a-linked-list/1
+
+this recursive way is quite similar with iterative idea.
+
+It try to change next->next = current recursively.
+
+*/
+
+
+Node* reverseList(Node *prev, Node *curr) {
+    if (curr == NULL) return prev;
+    
+    Node* next = curr->next;
+    curr->next = prev;
+    return reverseList(next, curr);
+}
+
+// Should reverse list and return new head.
+Node* reverseList(Node *head)
+{
+    if (head == NULL || head->next == NULL) return head;
+    
+    Node *next = head->next;
+    head->next = NULL;
+
+    return reverseList(head, next);
+}
+
+
+
+
