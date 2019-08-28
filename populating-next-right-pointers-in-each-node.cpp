@@ -123,3 +123,40 @@ public:
     }
 #endif
 };
+
+
+
+
+
+////////////////////////////
+// https://practice.geeksforgeeks.org/problems/connect-nodes-at-same-level/1
+
+void connect(Node *p)
+{
+   
+   if (p == NULL) return;
+   queue<Node*> q;
+   q.push(p);
+   q.push(NULL);
+   
+   while(!q.empty()) {
+       Node *t = q.front();
+       q.pop();
+       
+       if (t == NULL) {
+           if (!q.empty()) {
+               q.push(NULL);
+           }
+       } else {
+           t->nextRight = q.front();
+           
+           if (t->left != NULL) {
+               q.push(t->left);
+           }
+           
+           if (t->right != NULL) {
+               q.push(t->right);
+           }
+       }
+   }
+}
