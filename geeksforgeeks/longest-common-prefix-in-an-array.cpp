@@ -32,6 +32,7 @@ Testcase 1: Longest common prefix in all the given string is gee.
 // https://practice.geeksforgeeks.org/problems/longest-common-prefix-in-an-array/0
 
 
+// https://www.geeksforgeeks.org/longest-common-prefix-using-character-by-character-matching/
 // try it on https://www.onlinegdb.com/
 
 #include <iostream>
@@ -113,4 +114,22 @@ int main() {
 	
 	return 0;
 }
+
+
+
+
+/////////////////////////////////////
+// https://www.geeksforgeeks.org/longest-common-prefix-using-word-by-word-matching/
+
+
+// https://www.geeksforgeeks.org/longest-common-prefix-using-linked-list/
+
+
+
+// https://www.geeksforgeeks.org/longest-common-prefix-using-binary-search/
+
+
+// https://www.geeksforgeeks.org/longest-common-prefix-using-trie/
+
+
 
