@@ -29,8 +29,9 @@ Output: -1
 
 
 
+
 class Solution {
-    public int search(int[] nums, int target) {
+    public int search2(int[] nums, int target) {
         if (nums.length == 0) {
             return -1;
         }
@@ -63,7 +64,94 @@ class Solution {
         }
         return -1;
     }
+    
+    public int search1(int[] nums, int target) {
+        if (nums.length == 0) {
+            return -1;
+        }
+        int low = 0, high = nums.length-1;
+        while(low <= high) {
+            int m = (low+high)/2;
+            if (nums[m] == target) {
+                return m;
+            } else if (nums[low] <= nums[m]) { // left side is ordered
+                if (nums[low] <= target && target < nums[m]) {
+                    high = m-1;
+                } else {
+                    low = m+1;
+                }
+            } else { // right side is ordered
+                if (nums[m] < target && target <= nums[high]) {
+                    low = m+1;
+                } else {
+                    high = m-1;
+                }
+            }
+        }
+        return -1;
+    }
+    
+    
+    private int findPivot(int[] nums) {
+        int n = nums.length;
+        if (nums[0] <= nums[n-1]) {
+            return 0;
+        }
+        int low = 0, high = n-1;
+        while (low <= high) {
+            if (low == high) {
+                return low;
+            }
+            int m = (low+high)/2;
+
+            if (m-1 >= 0 && nums[m-1] > nums[m] 
+                && m+1 < n && nums[m] < nums[m+1]) {
+                return m;
+            }
+
+            if (nums[low] <= nums[m]) {
+                if (nums[m] <= nums[high]) {
+                    return low;
+                } else {
+                    low = m+1;
+                }
+            } else {
+                high = m-1;
+            }
+        }
+        return -1;
+    }
+    private int basicSearch(int[] nums, int low, int high, int target) {
+        while(low <= high) {
+            int m = (low+high)/2;
+            if (nums[m] == target) {
+                return m;
+            } else if (nums[m] < target) {
+                low = m+1;
+            } else {
+                high = m-1;
+            }
+        }
+        return -1;
+        
+    }
+    
+    public int search3(int[] nums, int target) {
+        if (nums.length == 0) {
+            return -1;
+        }
+        int pivot = findPivot(nums);
+        
+        if (pivot > 0 && nums[0] <= target && target <= nums[pivot-1]) {
+            return basicSearch(nums, 0, pivot-1, target);
+        } else {
+            return basicSearch(nums, pivot, nums.length-1, target);
+        }
+        
+    }
+    
+    public int search(int[] nums, int target) {
+        return search3(nums, target);
+    }
 }
-
-
 
