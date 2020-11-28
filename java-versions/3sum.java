@@ -40,6 +40,9 @@ class Solution {
                 while(p<q && nums[p-1] == nums[p]) { 
                     ++p;
                 }
+                while(p<q && nums[q] == nums[q+1]) {
+                    --q;
+                }
             } else if (sum < 0) {
                 ++p;
             } else {
@@ -65,5 +68,4 @@ class Solution {
         return result;
     }
 }
-
 
