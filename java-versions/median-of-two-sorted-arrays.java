@@ -44,6 +44,7 @@ class Solution {
             return findMedianSortedArrays(nums2, nums1);
         }
         
+        // 这里我们不用x-1，因为这里是找切点位置，和二分查找某个特定位置有一点区别。
         int low = 0, high = x;
         while(low <= high) {
             int partitionX = (low + high)/2;
@@ -73,3 +74,15 @@ class Solution {
 
 
 
+
+
+/*
+Complexity Analysis
+
+Time complexity: O(log(min(m,n))).
+At first, the searching range is [0, m]. And the length of this searching range will be reduced by half after each loop. So, we only need log(m) loops. Since we do constant operations in each loop, so the time complexity is O\big(\log(m)\big)O(log(m)). Since m≤n, so the time complexity is O(log(min(m,n))).
+
+Space complexity: O(1)O(1).
+We only need constant memory to store 99 local variables, so the space complexity is O(1)O(1).
+
+*/
