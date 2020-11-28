@@ -35,6 +35,7 @@ class Solution {
                 result.add(Arrays.asList(nums[i], nums[p], nums[q]));
 
                 ++p; // move forward
+                --q;
                 // de-dup and make sure p<q
                 while(p<q && nums[p-1] == nums[p]) { 
                     ++p;
