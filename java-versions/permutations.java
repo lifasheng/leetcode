@@ -78,7 +78,7 @@ class Solution {
         return result;
     }
     
-    
+    // Time: O(n*n!), because each nextPermutation is O(n), Space: O(1)    
     // same method as nextPermutation
     public List<List<Integer>> permute1(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
@@ -106,6 +106,7 @@ class Solution {
         }
     }
     
+    // Time: O(N!), Space: O(N!)
     public List<List<Integer>> permute2(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
         // convert int[] to List<Integer>, so that we don't need to convert int[] to List<Integer> in the recursive method, which requires a lot of boxed operation. Also we can leverage Collections.swap(List, i, j)
