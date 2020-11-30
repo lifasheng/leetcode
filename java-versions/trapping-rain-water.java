@@ -14,7 +14,7 @@ Input: height = [4,2,0,3,2,5]
 Output: 9
 */
 
-// Time: O(N), Space: O(1)
+// Time: O(N), Space: O(N)
 class Solution {
     public int trap(int[] height) {
         if (height == null) {
