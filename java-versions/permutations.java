@@ -106,7 +106,7 @@ class Solution {
         }
     }
     
-    // Time: O(N!), Space: O(N!)
+    // Time: O(N!), Space: O(n)
     public List<List<Integer>> permute2(int[] nums) {
         List<List<Integer>> result = new ArrayList<>();
         // convert int[] to List<Integer>, so that we don't need to convert int[] to List<Integer> in the recursive method, which requires a lot of boxed operation. Also we can leverage Collections.swap(List, i, j)
