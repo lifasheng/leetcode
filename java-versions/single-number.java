@@ -30,6 +30,7 @@ Output: 1
 */
 
 class Solution {
+    // use HashMap, Time: O(N), Space: O(N)
     public int singleNumber1(int[] nums) {
         Map<Integer, Integer> m = new HashMap<>();
         for(int i : nums) {
@@ -43,7 +44,23 @@ class Solution {
         throw new RuntimeException("bad request");
     }
     
+    // use HashSet, Time: O(N), Space: O(N)
     public int singleNumber2(int[] nums) {
+        Set<Integer> s = new HashSet<>();
+        Long arraySum = 0L;
+        for(int i : nums) {
+            arraySum += i;
+            s.add(i);
+        }
+        Long setSum = 0L;
+        for(int i: s) {
+            setSum += i;
+        }
+        return (int)(2 * setSum - arraySum);
+    }
+    
+    // bit xor, Time: O(N), Space: O(1)
+    public int singleNumber3(int[] nums) {
         int result = 0;
         for(int i : nums) {
             result ^= i;
@@ -52,7 +69,7 @@ class Solution {
     }
     
     public int singleNumber(int[] nums) {
-        return singleNumber2(nums);
+        return singleNumber3(nums);
     }
 }
 
