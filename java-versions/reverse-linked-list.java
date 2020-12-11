@@ -23,6 +23,7 @@ A linked list can be reversed either iteratively or recursively. Could you imple
  * }
  */
 class Solution {
+    // 迭代，两两反转
     public ListNode reverseList1(ListNode head) {
         ListNode head2 = null;
         while(head != null) {
@@ -63,9 +64,41 @@ class Solution {
         return reverseRecursively(prev, cur);
     }
     
+    // 头插法，迭代反转
+    /*
+    以包含四个元素、带有头结点的链表为例:
+    head->n1->n2->n3->n4->null
+    保持头结点不变，头插法实现链表反转步骤为：
+    1： 将n2插在11前面，该链表变为：
+    head->n2->n1->n3->n4；
+    2： 将n3插在n2前面，该链表变为：
+    head->n3->n2->n1->n4；
+    3： 将a4插在a3前面，该链表变为：
+    head->n4->n3->n2->n1；
+    可以发现，此时已经完成了链表的反转。
+    */
+    public ListNode reverseList4(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode dummyHead = new ListNode(-1, head);
+        ListNode prev = dummyHead.next;
+        ListNode cur = prev.next;
+
+        // prev 指向的是第一个节点，并且它不会变，一直指向该节点。
+        // 将cur节点插入到头部去，即插入到dummyHead之后。
+        while(cur != null) {
+            prev.next = cur.next;
+            cur.next = dummyHead.next;
+            dummyHead.next = cur;
+            cur = prev.next;
+        }
+
+        return dummyHead.next;
+    }
+
     public ListNode reverseList(ListNode head) {
-        return reverseList3(head);
+        return reverseList4(head);
     }
 }
-
 
