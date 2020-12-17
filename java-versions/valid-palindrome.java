@@ -1,0 +1,58 @@
+/*
+125. Valid Palindrome
+Easy
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+Note: For the purpose of this problem, we define empty string as valid palindrome.
+
+Example 1:
+
+Input: "A man, a plan, a canal: Panama"
+Output: true
+Example 2:
+
+Input: "race a car"
+Output: false
+ 
+
+Constraints:
+
+s consists only of printable ASCII characters.
+*/
+
+
+/*
+1. String.length();
+2. String.charAt(int);
+3. Character.toUpperCase(char);
+4. String.toCharArray() => char[]
+5. String.toUpperCase() 对整个字符串转换
+*/
+class Solution {
+    private boolean isAlphaNumeric(char c) {
+        return ('A' <= c && c <= 'Z')
+            || ('0' <= c && c <= '9');
+    }
+    
+    public boolean isPalindrome(String s) {
+        char[] array = s.toCharArray(); // 这个会调用native System.arraycopy
+        int n = array.length;
+        
+        int i = 0, j = n-1;
+        while (i<j) {
+            char ci = Character.toUpperCase(array[i]);
+            char cj = Character.toUpperCase(array[j]);
+            if (!isAlphaNumeric(ci)) {
+                ++i;
+            } else if (!isAlphaNumeric(cj)) {
+                --j;
+            } else {
+                if (ci != cj) return false;
+                ++i;
+                --j;
+            }
+        }
+        return true;
+    }
+}
+
