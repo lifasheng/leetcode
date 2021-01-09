@@ -45,5 +45,9 @@ class Solution {
         }
         return -1;
     }
+
+
+    // TODO: KMP algorithm?
+
 }
 
