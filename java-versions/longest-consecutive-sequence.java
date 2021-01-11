@@ -50,3 +50,62 @@ class Solution {
 }
 
 
+
+
+
+//////////////////////////////////////////////
+public int longestConsecutiveSeq(int[] nums) {
+    if(nums == null || nums.length == 0)
+        return 0;
+    Set<Integer> numsSet = new HashSet();
+    for(int num : nums) {
+        numsSet.add(num);
+    }
+    
+    int longestSeqLen = 0;
+    
+    for(int num : numsSet) {
+        if(!numsSet.contains(num-1)) {
+            int currNum = num;
+            int currSeqLen = 1;
+            while(numsSet.contains(currNum+1)) {
+                currSeqLen ++; 
+                currNum ++;
+            }
+            
+            longestSeqLen = Math.max(longestSeqLen, currSeqLen);
+        }
+    }
+    
+    return longestSeqLen;
+}
+
+
+
+///////////Sort///////////////
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        
+        Arrays.sort(nums);
+
+        int longestSeqLen = 1;
+        int prev = nums[0];
+        int curLen = 1;
+        for(int i=1; i<nums.length; ++i) {
+            if (nums[i] == prev) continue;
+            
+            if (nums[i] == prev+1) {
+                curLen ++;
+                longestSeqLen = Math.max(longestSeqLen, curLen);
+            } else {
+                curLen = 1;
+            }
+            prev = nums[i];
+        }
+
+        return longestSeqLen;
+    }
+}
+
