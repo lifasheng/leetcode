@@ -63,6 +63,39 @@ class Solution {
 
 
 
+//---------------------------------------------
+class Solution {
+    class Pair {
+        int v1;
+        int v2;
+        public Pair(int v1, int v2) {
+            this.v1 = v1;
+            this.v2 = v2;
+        }
+    }
+    public List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        PriorityQueue<Pair> pq = new PriorityQueue<Pair>((a, b) -> (b.v1 + b.v2) - (a.v1 + a.v2));
+                
+        for(int i=0; i<nums1.length; ++i) {
+            for(int j=0; j<nums2.length; ++j) {
+                pq.add(new Pair(nums1[i], nums2[j]));
+                if (pq.size() > k) {
+                    pq.poll();
+                }
+            }
+        }
+
+        List<List<Integer>> result = new ArrayList<>();
+        while(!pq.isEmpty()) {
+            Pair p =  pq.poll();
+            result.add(Arrays.asList(p.v1, p.v2));
+        }
+        
+        return result;
+    }
+}
+
+
 
 
 
