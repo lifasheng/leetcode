@@ -18,7 +18,7 @@ Output: false
 */
 
 
-// TODO: understand more
+// TODO: understand more: Topological sort
 class Solution {
   class UF {
     int[] parents;
