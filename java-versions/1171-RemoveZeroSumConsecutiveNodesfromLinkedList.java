@@ -40,7 +40,7 @@ class Solution {
         return removeZeroSumSubListIterative(head);
     }
     
-    // O(N)
+    // O(N): prefix sum, TODO: get familiar with this!
     private ListNode removeZeroSumSubListIterative(ListNode head) {
         if (head == null) return null;
         
