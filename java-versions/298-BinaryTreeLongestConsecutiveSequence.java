@@ -31,6 +31,7 @@ Explanation: Longest consecutive sequence path is 2-3, not 3-2-1, so return 2.
  */
 class Solution {
     
+    // we need to find a sequence that is increaseing like 3->4->5.
     private int maxLen;
     public int longestConsecutive(TreeNode root) {
         if (root == null) return 0;
