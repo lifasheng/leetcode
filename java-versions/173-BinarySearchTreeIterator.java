@@ -47,23 +47,26 @@ bSTIterator.hasNext(); // return False
  */
 class BSTIterator {
 
-    private Stack<TreeNode> stack;
+    private Deque<TreeNode> stack;
     private TreeNode iter;
+    
     public BSTIterator(TreeNode root) {
-        this.stack = new Stack<>();
+        this.stack = new ArrayDeque<>();
         this.iter = root;
+        loopAccessLeftChild();
     }
     
     public int next() {
-        loopAccessLeftChild();
         iter = stack.pop();
         int nextVal = iter.val;
+        
         iter = iter.right;
+        loopAccessLeftChild();
+        
         return nextVal;
     }
     
     public boolean hasNext() {
-        loopAccessLeftChild();
         return !stack.isEmpty();
     }
     
@@ -81,5 +84,4 @@ class BSTIterator {
  * int param_1 = obj.next();
  * boolean param_2 = obj.hasNext();
  */
-
 
