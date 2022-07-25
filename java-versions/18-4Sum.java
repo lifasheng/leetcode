@@ -109,3 +109,56 @@ class Solution {
 }
 
 
+
+
+// latest version, better to understand
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        Arrays.sort(nums);
+        return nSum_recursive(nums, 4, 0, target);
+    }
+    
+    // here, target is set as long type, which is important.
+    // test case: [1000000000,1000000000,1000000000,1000000000]       -294967296
+    private List<List<Integer>> nSum_recursive(int[] nums, int n, int start, long target) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        int size = nums.length;
+        if (n < 2 || start >= size) return result;
+
+        // 递归出口
+        if (n == 2) {
+            int low = start, high = size - 1;
+            while (low < high) {
+                int left = nums[low];
+                int right = nums[high];
+                int sum = nums[low] + nums[high];
+                if (sum == target) {
+                    result.add(new LinkedList<>(Arrays.asList(nums[low], nums[high])));
+
+                    while (low < high && nums[low] == left) ++ low;
+                    while (low < high && nums[high] == right) -- high;
+                } else if (sum < target) {
+                    while (low < high && nums[low] == left) ++ low;
+                } else {
+                    while (low < high && nums[high] == right) -- high;
+                }
+            }
+            return result;
+        }
+
+        // n > 2 时，递归计算 (n-1)Sum 的结果
+        for (int i = start; i < size; ++i) {
+            List<List<Integer>> subResult = nSum_recursive(nums, n - 1, i + 1, target - nums[i]);
+            for (List<Integer> list : subResult) {
+                list.add(0, nums[i]);
+                result.add(list);
+            }
+            while (i + 1 < size && nums[i + 1] == nums[i]) ++i;
+        }
+        return result;
+    }
+}
+
+
+
