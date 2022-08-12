@@ -79,6 +79,31 @@ class Solution {
         
         return s.substring(startIdx, startIdx+maxLen);
     }
+
+    // same as above, just simplify it.
+    private String longestPalindrome2(String s) {
+        if (s == null || s.isEmpty()) return "";
+        int maxLen = 1;
+        int startIndex = 0;
+        for (int i = 0; i < s.length(); ++i) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > maxLen) {
+                maxLen = len;
+                startIndex = i - (len - 1) / 2; // important
+            }
+        }
+        return s.substring(startIndex, maxLen + startIndex);
+    }
+    
+    private int expandAroundCenter(String s, int i, int j) {
+        while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
+            -- i;
+            ++ j;
+        }
+        return j - i - 1; // important
+    }
     
     /*
       动态规划法  O(N^2)

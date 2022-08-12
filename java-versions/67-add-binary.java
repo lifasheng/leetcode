@@ -98,3 +98,33 @@ class Solution {
 }
 
 
+
+class Solution {
+    public String addBinary(String a, String b) {
+        int m = a.length();
+        int n = b.length();
+        
+        int i = m - 1;
+        int j = n - 1;
+        int carry = 0;
+        StringBuilder sb = new StringBuilder();
+        while (i >= 0 || j >= 0) {
+            int ai = (i >= 0) ? (a.charAt(i) - '0') : 0;
+            int bj = (j >= 0) ? (b.charAt(j) - '0') : 0;
+            
+            int sum = ai + bj + carry;
+            char c = ((sum % 2 == 0) ? '0' : '1');
+            sb.append(c);
+            carry = sum / 2;
+            -- i;
+            -- j;
+        }
+        
+        if (carry == 1) {
+            sb.append('1');
+        }
+        
+        return sb.reverse().toString();
+    }
+}
+

@@ -137,3 +137,125 @@ class LRUCache {
  * obj.put(key,value);
  */
 
+
+
+
+class LRUCache {
+    
+    class Node {
+        int key;
+        int val;
+        Node prev;
+        Node next;
+        Node(int key, int val) {
+            this.key = key;
+            this.val = val;
+        }
+    }
+    
+    class DoublyLinkedList {
+        Node head;
+        Node tail;
+        
+        void addTail(Node node) {
+            if (tail == null) {
+                head = node;
+                tail = node;
+            } else {
+                node.prev = tail;
+                tail.next = node;
+                tail = node;
+            }
+        }
+        
+        void removeTail() {
+            if (tail == null) return;
+            if (tail.prev == null) {
+                head = null;
+                tail = null;
+                return;
+            }
+            
+            Node prev = tail.prev;
+            prev.next = null;
+            tail = prev;
+        }
+        
+        Node removeHead() {
+            Node node = head;
+            if (head.next == null) {
+                head = null;
+                tail = null;
+            } else {
+                Node next = head.next;
+                next.prev = null;
+                head = next;
+            }
+            return node;
+        }
+        
+        void removeNode(Node node) {
+            if (node == head) {
+                removeHead();
+                return;
+            }
+            
+            if (node == tail) {
+                removeTail();
+                return;
+            }
+            
+            Node prev = node.prev;
+            Node next = node.next;
+            prev.next = next;
+            next.prev = prev;
+            
+            node.prev = null;
+            node.next = null;
+        }
+    }
+
+    Map<Integer, Node> map;
+    DoublyLinkedList list;
+    int cap;
+    public LRUCache(int capacity) {
+        map = new HashMap<>();
+        list = new DoublyLinkedList();
+        cap = capacity;
+    }
+    
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+        
+        Node node = map.get(key);
+        list.removeNode(node);
+        list.addTail(node);
+        return node.val;
+    }
+    
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            Node node = map.get(key);
+            node.val = value;
+            list.removeNode(node);
+            list.addTail(node);
+        } else {
+            if (map.size() >= cap) {
+                Node node = list.removeHead();
+                map.remove(node.key);
+            }
+            
+            Node node = new Node(key, value);
+            list.addTail(node);
+            map.put(key, node);
+        }
+    }
+}
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache obj = new LRUCache(capacity);
+ * int param_1 = obj.get(key);
+ * obj.put(key,value);
+ */
+

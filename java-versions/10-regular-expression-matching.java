@@ -82,3 +82,55 @@ class Solution {
     }
 }
 
+
+
+
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        return isMatch_dp(s, p);
+    }
+    
+    private boolean isMatch_recursive(String s, String p) {
+        if (p.isEmpty()) return s.isEmpty();
+        boolean firstMatch = (!s.isEmpty() && (p.charAt(0) == '.' || p.charAt(0) == s.charAt(0)));
+        
+        if (p.length() >= 2 && p.charAt(1) == '*') {
+            return isMatch_recursive(s, p.substring(2)) || (firstMatch && isMatch_recursive(s.substring(1), p));
+        } else {
+            return firstMatch && isMatch_recursive(s.substring(1), p.substring(1));
+        }
+    }
+    
+    // dp: very good!
+    private Boolean[][] memo;
+    private boolean isMatch_dp(String s, String p) {
+        memo = new Boolean[s.length() + 1][p.length() + 1];
+        return isMatch(0, 0, s, p);
+    }
+    
+    private boolean isMatch(int i, int j, String s, String p) {
+        if (memo[i][j] != null) {
+            return memo[i][j];
+        }
+
+        if (j == p.length()) {
+            memo[i][j] = (i == s.length());
+            return memo[i][j];
+        } 
+        
+        boolean ans = false;
+        boolean firstMatch = (i < s.length()) && (p.charAt(j) == '.' || p.charAt(j) == s.charAt(i));
+        
+        if (j + 1 < p.length() && p.charAt(j + 1) == '*') {
+            ans = isMatch(i, j + 2, s, p) || (firstMatch && isMatch(i + 1, j, s, p));
+        } else {
+            ans = firstMatch && isMatch(i + 1, j + 1, s, p);
+        }
+        
+        memo[i][j] = ans;
+        return memo[i][j];
+    }
+}
+
+
