@@ -47,3 +47,73 @@ class Solution {
 }
 
 
+
+class Solution {
+    
+    public List<List<Integer>> subsets(int[] nums) {
+        return subsets_dfs(nums);
+    }
+    
+    
+    // solution 1: recursive
+    private List<List<Integer>> subsets_recursive(int[] nums) {
+        return subsets(nums, nums.length);
+    }
+    
+    private List<List<Integer>> subsets(int[] nums, int n) {
+        if (n == 0) {
+            List<List<Integer>> result = new ArrayList<>();
+            result.add(new ArrayList<>());
+            return result;
+        }
+        
+        List<List<Integer>> result = subsets(nums, n - 1);
+        int size = result.size(); // important to define a var here, not in for loop
+        for (int i = 0; i < size; ++i) {
+            List<Integer> list = new ArrayList(result.get(i));
+            list.add(nums[n - 1]);
+            result.add(list);
+        }
+        return result;
+    }
+    
+    // solution 2: dfs
+    private List<List<Integer>> subsets_dfs(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs(nums, result, path, 0);
+        return result;
+    }
+    
+    private void dfs(int[] nums, List<List<Integer>> result, List<Integer> path, int index) {
+        if (index == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        
+        // without nums[index]
+        dfs(nums, result, path, index + 1);
+        
+        // with nums[index]
+        path.add(nums[index]);
+        dfs(nums, result, path, index + 1);
+        path.remove(path.size() - 1);
+    }
+
+    // solution 3: use bit
+    private List<List<Integer>> subsets_useBit(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        int n = nums.length;
+        for (int i = 0; i < (1 << n); ++i) {
+            List<Integer> path = new ArrayList<>();
+            for (int j = 0; j < n; ++j) {
+                if ((i & (1 << j)) > 0) {
+                    path.add(nums[j]);
+                }
+            }
+            result.add(path);
+        }
+        return result;
+    }
+}
+

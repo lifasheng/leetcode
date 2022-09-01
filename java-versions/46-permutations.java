@@ -122,3 +122,128 @@ class Solution {
 }
 
 
+
+
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        return permute_nextPermutation(nums);
+    }
+    
+    
+    // solution 1: O(N!)  < time: < O(N * N!)
+    private List<List<Integer>> permute_backtrack(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        backtrack(nums, result, 0);
+        return result;
+    }
+    
+    private void backtrack(int[] nums, List<List<Integer>> result, int index) {
+        if (index == nums.length) {
+            List<Integer> list = new ArrayList<>();
+            for (int num : nums) {
+                list.add(num);
+            }
+            result.add(list);
+            return;
+        }
+        
+        for (int i = index; i < nums.length; ++i) {
+            swap(nums, index, i);
+            backtrack(nums, result, index + 1);
+            swap(nums, index, i);
+        }
+    }
+    
+    private void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+    
+    // solution 2: nextPermutation
+    private List<List<Integer>> permute_nextPermutation(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        Arrays.sort(nums);
+        
+        do {
+            List<Integer> list = new ArrayList<>();
+            for (int num : nums) {
+                list.add(num);
+            }
+            result.add(list);
+        } while (nextPermutation(nums));
+        
+        
+        return result;
+    }
+    
+    private boolean nextPermutation(int[] nums) {
+        int n = nums.length;
+        int pivot = -1;
+        for (int i = n - 2; i >= 0; --i) {
+            if (nums[i] < nums[i + 1]) {
+                pivot = i;
+                break;
+            }
+        }
+        
+        if (pivot == -1) return false;
+        
+        int firstGreater = n - 1;
+        for (int i = n - 1; i >= 0; --i) {
+            if (nums[i] > nums[pivot]) {
+                firstGreater = i;
+                break;
+            }
+        }
+        
+        swap(nums, pivot, firstGreater);
+        
+        int i = pivot + 1, j = n - 1;
+        while (i < j) {
+            swap(nums, i, j);
+            ++ i;
+            -- j;
+        }
+        return true;
+    }
+    
+    
+    // 1 2 4 3 5 6
+    // 1 2 4 3 6 5
+    // 1 2 4 5 3 6
+
+    // solution 3: use bool array, very good!!  O(N * N!)
+    // https://labuladong.github.io/algo/4/31/105/
+    private List<List<Integer>> permute_backtrack_useBoolArray(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        boolean[] used = new boolean[nums.length];
+        
+        backtrack(nums, result, path, used, 0);
+        return result;
+    }
+    
+    private void backtrack(int[] nums, 
+                           List<List<Integer>> result, 
+                           List<Integer> path,
+                           boolean[] used, 
+                           int index) {
+        if (index == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        
+        for (int i = 0; i < nums.length; ++i) {
+            if (used[i]) continue;
+            
+            used[i] = true;
+            path.add(nums[i]);
+            backtrack(nums, result, path, used, index + 1);
+            path.remove(path.size() - 1);
+            used[i] = false;
+        }
+    }
+}
+
+
