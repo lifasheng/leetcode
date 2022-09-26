@@ -41,7 +41,7 @@ class Solution {
         return maxArea;
     }
     
-    // two pointer, O(N)
+    // two pointer, O(N), very good!
     private int maxArea_twoPointer(int[] height) {
         int left = 0, right = height.length - 1;
         int maxArea = 0;
