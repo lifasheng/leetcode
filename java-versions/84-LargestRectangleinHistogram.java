@@ -47,3 +47,77 @@ class Solution {
     }
 }
 
+
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+        return largestRectangleArea_stack(heights);
+    }
+    
+    // TLE, O(N^2)
+    private int largestRectangleArea_bruteForce(int[] heights) {
+        int maxArea = 0;
+        for (int i = 0; i < heights.length; ++i) {
+            int width = 1;
+            int j = i - 1;
+            while (j >= 0 && heights[j] >= heights[i]) {
+                -- j;
+                ++ width;
+            }
+            
+            j = i + 1;
+            while (j < heights.length && heights[j] >= heights[i]) {
+                ++ j;
+                ++ width;
+            }
+            maxArea = Math.max(maxArea, heights[i] * width);
+        }
+        return maxArea;
+    }
+    
+    // O(NlogN), worst case O(N^2) TLE
+    private int largestRectangleArea_divideAndConquer(int[] heights) {
+        return helper(heights, 0, heights.length - 1);
+    }
+    
+    private int helper(int[] heights, int start, int end) {
+        if (start > end) return 0;
+        
+        int minIndex = start;
+        for (int i = start + 1; i <= end; ++i) {
+            if (heights[i] < heights[minIndex]) {
+                minIndex = i;
+            }
+        }
+        
+        return Math.max(heights[minIndex] * (end - start + 1),
+                       Math.max(helper(heights, start, minIndex - 1), helper(heights, minIndex + 1, end)));
+    }
+    
+    // solution 3: monotonic stack
+    private int largestRectangleArea_stack(int[] heights) {
+        int maxArea = 0;
+        Deque<Integer> stack = new ArrayDeque<>();
+
+        int n = heights.length;
+        int i = 0;
+        while (i < n) {
+            if (stack.isEmpty() || heights[i] > heights[stack.peek()]) {
+                stack.push(i);
+                ++ i;
+            } else {
+                int index = stack.pop();
+                int width = stack.isEmpty() ? i : (i - stack.peek() - 1);
+                maxArea = Math.max(maxArea, heights[index] * width);
+            }
+        }
+        
+        while (!stack.isEmpty()) {
+            int index = stack.pop();
+            int width = stack.isEmpty() ? i : (i - stack.peek() - 1);
+            maxArea = Math.max(maxArea, heights[index] * width);
+        }
+        return maxArea;
+    }
+}
+

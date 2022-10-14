@@ -65,6 +65,7 @@ class Solution {
     // solution 1: 递归 + 备忘录法, 注意和131. Palindrome Partitioning里面的dfs的细微区别
     // 因为这里只需要计算划分数，不需要返回所有可能的划分很适合递归求解，同时用上备忘录进行优化。
     // 这个方法要掌握，也比较好理解.
+    // memoCuts 表示从i到n-1的cut数
     // very very good!!!
     public int minCut_1(String s) {
         int n = s.length();
@@ -106,7 +107,12 @@ class Solution {
     
     
     // solution 2: dp bottom up, 
-    // 因为这里只需要计算划分数，不需要返回所有可能的划分很适合递归求解，同时用上备忘录进行优化。
+    // f(i, j) = min {f(i, k) + f(k + 1, j)} , i ≤ k ≤ j, 0 ≤ i ≤ j < n
+    // 这是一个二维函数，实际写代码比较麻烦。
+    // 所以要转换成一维 DP。如果每次，从 i 往右扫描，每找到一个回文就算一次 DP 的话，就可以
+    // 转换为 f(i)= 区间 [i, n-1] 之间最小的 cut 数，n 为字符串长度，则状态转移方程为
+    // f(i) = min {f(j + 1) + 1} , i ≤ j < n
+    // 计算时需要从右往左计算
     public int minCut_2(String s) {
         int n = s.length();
         
@@ -117,24 +123,18 @@ class Solution {
             }
         }
         
-        // cutsDp[i] stores the minimum number of cuts for a substring ending at index i, starting from 0.
-        // 这个很巧妙，如果用二维dp来理解
-        // f[i][j] = dp[i][j] ? 0 : min(f[i][i] + f[i + 1][j],  f[i][i+1] + f[i + 2][j], ...) + 1
-        // 这看起来是个三重循环，i，j，k
-        // 如果我们把j固定，并且判断dp[k][j] 是不是palindrome,如果是，则，f[i][j] = f[i][k] + 1
-        // 用cutsDp来理解，j相当于end，k相当于start，i=0
-        Integer[] cutsDp = new Integer[n];
-        for (int end = 0; end < n; ++end) {
-            int minCut = end;
-            for (int start = 0; start <= end; ++ start) {
-                if (dp[start][end]) {
-                    minCut = start == 0 ? 0 : Math.min(minCut, cutsDp[start - 1] + 1);
-                }
-            }
-                
-            cutsDp[end] = minCut;
+        int[] f = new int[n + 1];
+        for (int i = 0; i <= n; ++i) {
+            f[i] = n - 1 - i;
         }
-        return cutsDp[n - 1];
+        for (int i = n - 1; i >= 0; --i) {
+            for (int j = i; j < n; ++j) {
+                if (dp[i][j]) {
+                    f[i] = Math.min(f[i], f[j + 1] + 1);
+                }
+             }
+        }
+        return f[0];
     }
 }
 

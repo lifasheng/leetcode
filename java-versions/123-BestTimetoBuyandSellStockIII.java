@@ -48,6 +48,32 @@ class Solution {
         int n = prices.length;
         
         int[] leftProfits = new int[n];
+        int[] rightProfits = new int[n + 1];
+        
+        int currMin = prices[0];
+        for (int i = 1; i < n; ++i) {
+            leftProfits[i] = Math.max(leftProfits[i - 1], prices[i] - currMin);
+            currMin = Math.min(currMin, prices[i]);
+        }
+        
+        int currMax = prices[n - 1];
+        for (int i = n - 2; i >= 0; --i) {
+            rightProfits[i] = Math.max(rightProfits[i + 1], currMax - prices[i]);
+            currMax = Math.max(currMax, prices[i]);
+        }
+        
+        int maxProfit = 0;
+        for (int i = 0; i < n; ++i) {
+            maxProfit = Math.max(maxProfit, leftProfits[i] + rightProfits[i + 1]);
+        }
+        
+        return maxProfit;
+    }
+
+    public int maxProfit_2(int[] prices) {
+        int n = prices.length;
+        
+        int[] leftProfits = new int[n];
         int[] rightProfits = new int[n];
         
         int maxProfit = 0;
