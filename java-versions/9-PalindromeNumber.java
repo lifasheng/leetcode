@@ -23,9 +23,10 @@ Constraints:
 Follow up: Could you solve it without converting the integer to a string?
 */
 
+
 class Solution {
     public boolean isPalindrome(int x) {
-        return isPalindrome_noStringConversion(x);
+        return isPalindrome_compareLeftAndRight(x);
     }
     
     public boolean isPalindrome_convertToString(int x) {
@@ -54,7 +55,7 @@ class Solution {
     }
     
     // 直接翻转数字可能会溢出，所以考虑翻转一半数字
-    public boolean isPalindrome_noStringConversion(int x) {
+    public boolean isPalindrome_revertHalf(int x) {
         if (x < 0) {
             return false;
         }
@@ -76,6 +77,38 @@ class Solution {
         // 考虑奇数个数字和偶数个数字的情况。
         // 如：1221， 12321
         return (x == revertedNum) || (x == revertedNum/10);
+    }
+    
+    
+    // 左右比较
+    public boolean isPalindrome_compareLeftAndRight(int x) {
+        if (x < 0) {
+            return false;
+        }
+        if (x < 10) {
+            return true;
+        }
+        if (x % 10 == 0) {
+            return false;
+        }
+        
+        // 找到最高位的水平，是10位，还是百位，千位，万位等
+        int d = 1;
+        while (d <= x / 10) {
+            d *= 10;
+        }
+        
+        while (x > 0) {
+            int left = x / d;
+            int right = x % 10;
+            if (left != right) {
+                return false;
+            }
+            
+            x = (x%d) / 10;
+            d /= 100;
+        }
+        return true;
     }
 }
 
