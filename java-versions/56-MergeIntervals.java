@@ -50,3 +50,30 @@ class Solution {
     }
 }
 
+
+
+class Solution {
+    // 先排序， 再扫描一遍即可
+    // result.get(result.size() - 1) 对LinkedList和ArrayList都适用。
+    public int[][] merge(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> {
+            return Integer.compare(a[0], b[0]);
+        });
+        
+        List<int[]> result = new ArrayList<>();
+        result.add(intervals[0]);
+        
+        for (int i = 1; i < intervals.length; ++i) {
+            if (intervals[i][0] <= result.get(result.size() - 1)[1]) {
+                if (intervals[i][1] > result.get(result.size() - 1)[1]) {
+                    result.get(result.size() - 1)[1] = intervals[i][1];
+                }
+            } else {
+                result.add(intervals[i]);
+            }
+        }
+        
+        return result.toArray(new int[0][0]);
+    }
+}
+
