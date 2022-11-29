@@ -81,3 +81,61 @@ class Solution {
     }
 }
 
+
+//////////////////////////////////////////////////////////////////////
+class Solution {
+    public String minWindow(String s, String t) {
+        int m = s.length();
+        int n = t.length();
+        if (m < n) {
+            return "";
+        }
+        
+        Map<Character, Integer> requiredCount = new HashMap<>();
+        for (int i = 0; i < n; ++i) {
+            char c = t.charAt(i);
+            requiredCount.put(c, requiredCount.getOrDefault(c, 0) + 1);
+        }
+        
+        Map<Character, Integer> count = new HashMap<>();
+        int left = 0, right = 0;
+        int meet = 0;
+        int minLen = Integer.MAX_VALUE;  // 重点一，直接设成整数最大值
+        int start = -1;
+        
+        while (right < m) {
+            // expand right
+            char cr = s.charAt(right);
+            ++ right;
+            
+            if (requiredCount.containsKey(cr)) {
+                count.put(cr, count.getOrDefault(cr, 0) + 1);
+                if (count.get(cr).equals(requiredCount.get(cr))) {  // 重点二，不能用==，因为大于128，就不相等了，要用equals
+                    ++ meet;
+                }
+            }
+            
+            // shrink left
+            while (meet == requiredCount.size()) {
+                // update result
+                if (right - left < minLen) {
+                    minLen = right - left;
+                    start = left;
+                }
+                
+                char cl = s.charAt(left);
+                ++ left;
+                
+                if (requiredCount.containsKey(cl)) {
+                    count.put(cl, count.get(cl) - 1);
+                    if (count.get(cl) < requiredCount.get(cl)) {
+                        -- meet;
+                    }
+                }
+            }
+        }
+        
+        return (start > -1) ? s.substring(start, start + minLen) : "";
+    }
+}
+
