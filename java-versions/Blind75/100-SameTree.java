@@ -37,21 +37,19 @@ The number of nodes in both trees is in the range [0, 100].
  *     }
  * }
  */
+
 class Solution {
     public boolean isSameTree(TreeNode p, TreeNode q) {
-        return solution1(p, q);
-    }
-
-    private boolean solution1(TreeNode p, TreeNode q) {
         if (p == null && q == null) {
             return true;
         }
         
-        if ((p == null && q != null) || (p != null && q == null) || (p.val != q.val)) {
+        if (p == null || q == null || p.val != q.val) {
             return false;
         }
 
-        return solution1(p.left, q.left) && solution1(p.right, q.right);
+        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 }
+
 
