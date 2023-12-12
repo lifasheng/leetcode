@@ -234,3 +234,88 @@ public class FileSystem {
  * String param_4 = obj.readContentFromFile(filePath);
  */
 
+
+
+class FileSystem {
+
+    class TreeNode {
+        String path;
+        boolean isDir;
+        StringBuilder content;
+        Map<String, TreeNode> children;
+
+        public TreeNode(String path) {
+            this(path, false);
+        }
+
+        public TreeNode(String path, boolean isDir) {
+            this.path = path;
+            this.isDir = isDir;
+            this.children = new HashMap<>();
+            content = new StringBuilder();
+        }
+    }
+
+    TreeNode root;
+
+
+    public FileSystem() {
+        root = new TreeNode("/");
+    }
+
+    public List<String> ls(String path) {
+        TreeNode node = root;
+        if (path.equals("/")) {
+            List<String> res = new ArrayList<>(node.children.keySet());
+            Collections.sort(res);
+            return res;
+        }
+
+        String[] dirs = path.split("/");
+        for (int i = 1; i < dirs.length; ++i) {
+            String dir = dirs[i];
+            if (!node.children.containsKey(dir)) {
+                return new ArrayList<>();
+            } else {
+                node = node.children.get(dir);
+            }
+        }
+        if (node.isDir) {
+            List<String> res = new ArrayList<>(node.children.keySet());
+            Collections.sort(res);
+            return res;
+        } else {
+            return List.of(node.path);
+        }
+    }
+
+    public void mkdir(String path) {
+        navigateTree(path);
+    }
+
+    private TreeNode navigateTree(String path) {
+        TreeNode node = root;
+        String[] dirs = path.split("/");
+        for (int i = 1; i < dirs.length; ++i) {
+            String dir = dirs[i];
+            if (!node.children.containsKey(dir)) {
+                node.children.put(dir, new TreeNode(dir, true));
+            }
+            node = node.children.get(dir);
+        }
+        return node;
+    }
+
+    public void addContentToFile(String filePath, String content) {
+        TreeNode node = navigateTree(filePath);
+        node.isDir = false;
+        node.content.append(content);
+    }
+
+    public String readContentFromFile(String filePath) {
+        TreeNode node = navigateTree(filePath);
+        return node.content.toString();
+    }
+}
+
+

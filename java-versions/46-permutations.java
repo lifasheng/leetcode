@@ -247,3 +247,36 @@ class Solution {
 }
 
 
+
+
+// https://labuladong.github.io/algo/di-san-zha-24031/bao-li-sou-96f79/hui-su-sua-56e11/
+// permutation 不用index，不像subset和combination需要start/index参数
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<Integer> path = new ArrayList<>();
+        boolean[] visited = new boolean[nums.length];
+        List<List<Integer>> res = new ArrayList<>();
+        backtrack(nums, path, visited, res);
+        return res;
+    }
+
+    private void backtrack(int[] nums, List<Integer> path, boolean[] visited, List<List<Integer>> res) {
+        if (path.size() == nums.length) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; ++i) {
+            if (visited[i]) continue;
+
+            visited[i] = true;
+            path.add(nums[i]);
+
+            backtrack(nums, path, visited, res);
+
+            path.remove(path.size() - 1);
+            visited[i] = false;
+        }
+    }
+}
+

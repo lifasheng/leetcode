@@ -87,3 +87,54 @@ class Solution {
     }
 }
 
+
+
+
+
+// https://labuladong.github.io/algo/di-san-zha-24031/bao-li-sou-96f79/hui-su-sua-56e11/
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        backtrack(nums, path, res, 0);
+        return res;
+    }
+
+    private void backtrack(int[] nums, List<Integer> path, List<List<Integer>> res, int start) {
+        res.add(new ArrayList<>(path));
+
+        for (int i = start; i < nums.length; ++i) {
+            if (i > start && nums[i] == nums[i-1]) continue;
+
+            path.add(nums[i]);
+            backtrack(nums, path, res, i + 1);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+
+
+/*
+class Solution {
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> solution = new ArrayList<>();
+        int prev = Integer.MIN_VALUE;
+        int prev_start = 0;
+        solution.add(new ArrayList<>());
+        for(int k : nums) {
+            int start = k == prev ? prev_start : 0;
+            prev_start = solution.size();
+            for(int i = start; i < prev_start; ++i) {
+                List<Integer> newList = new ArrayList<>(solution.get(i));
+                newList.add(k);
+                solution.add(newList);
+            }
+            prev = k;
+        }
+        return solution;
+    }
+}
+*/

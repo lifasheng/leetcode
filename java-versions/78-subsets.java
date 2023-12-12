@@ -117,3 +117,44 @@ class Solution {
     }
 }
 
+
+
+
+// https://labuladong.github.io/algo/di-san-zha-24031/bao-li-sou-96f79/hui-su-sua-56e11/
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+        backtrack(nums, path, res, 0);
+        return res;
+    }
+
+    private void backtrack(int[] nums, List<Integer> path, List<List<Integer>> res, int start) {
+        res.add(new ArrayList<>(path));
+
+        for (int i = start; i < nums.length; ++i) {
+            path.add(nums[i]);
+            backtrack(nums, path, res, i + 1);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+
+
+/*
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> sets = new ArrayList<>();
+        sets.add(new ArrayList<>());
+        for(int i = 0; i < nums.length; ++i) {
+            int length = sets.size();
+            for(int j = 0; j < length; ++j) {
+                List<Integer> newList = new ArrayList<>(sets.get(j));
+                newList.add(nums[i]);
+                sets.add(newList);
+            }
+        }
+        return sets;
+    }
+}
+*/

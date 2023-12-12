@@ -60,3 +60,34 @@ class Solution {
     }
 }
 
+
+
+// https://labuladong.github.io/algo/di-san-zha-24031/bao-li-sou-96f79/hui-su-sua-56e11/
+
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> path = new ArrayList<>();
+
+        backtrack(candidates, target, path, res, 0, 0);
+        return res;
+    }
+
+    private void backtrack(int[] candidates, int target, List<Integer> path, List<List<Integer>> res, int sum, int start) {
+        if (sum == target) {
+            res.add(new ArrayList<>(path));
+        }
+
+        if (sum > target) return;
+
+        for (int i = start; i < candidates.length; ++i) {
+            path.add(candidates[i]);
+            backtrack(candidates, target, path, res, sum + candidates[i], i);
+            path.remove(path.size() - 1);
+        }
+    }
+
+}
+

@@ -62,3 +62,29 @@ class Solution {
     }
 }
 
+
+
+class Solution {
+    boolean found = false;
+    int res = -1;
+    int n = 0;
+    public int kthSmallest(TreeNode root, int k) {
+        preorder(root, k);
+        return res;
+    }
+
+    private void preorder(TreeNode root, int k) {
+        if (root == null) return;
+
+        kthSmallest(root.left, k);
+        if (found) return;
+        ++n;
+        if (n == k) {
+            res = root.val;
+            found = true;
+            return;
+        }
+        kthSmallest(root.right, k);
+    }
+}
+

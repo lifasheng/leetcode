@@ -22,6 +22,8 @@ nums[i] != nums[i + 1] for all valid i.
 */
 
 
+// https://leetcode.wang/leetcode-162-Find-Peak-Element.html
+// very very good!
 class Solution {
     
     public int findPeakElement(int[] nums) {

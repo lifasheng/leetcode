@@ -125,3 +125,58 @@ class Solution {
     }
 }
 
+
+
+
+
+/////////////////////////////////
+class Solution {
+    public int jump(int[] nums) {
+        return jump_bfs(nums);
+    }
+
+    public int jump_memo(int[] nums) {
+        int[] memo = new int[nums.length];
+        for (int i = 0; i < nums.length; ++i) {
+            memo[i] = nums.length;
+        }
+        return dfs(nums, 0, memo);
+    }
+
+    private int dfs(int[] nums, int p, int[] memo) {
+        int n = nums.length;
+        if (p >= n-1) return 0;
+
+        if (memo[p] != n) return memo[p];
+
+        for (int i = 1; i <= nums[p]; ++i) {
+            memo[p] = Math.min(memo[p], 1 + dfs(nums, p + i, memo));
+        }
+        return memo[p];
+    }
+
+    public int jump_bfs(int[] nums) {
+        int n = nums.length;
+        Queue<Integer> queue = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+        queue.offer(0);
+        visited.add(0);
+        int step = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; ++i) {
+                int p = queue.poll();
+                if (p == n - 1) return step;
+
+                for (int k = 1; k <= nums[p]; ++k) {
+                    if (!visited.contains(p + k)) {
+                        queue.offer(p + k);
+                        visited.add(p+k);
+                    }
+                }
+            }
+            ++ step;
+        }
+        return n;
+    }
+}
